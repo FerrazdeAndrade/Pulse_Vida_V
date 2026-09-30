@@ -103,3 +103,29 @@ Desenvolvido para salvar vidas e melhorar a gestão da saúde pública e privada
 *PulseVida - Conectando dados, cuidando de corações.* ❤️
 
 </div>
+
+====================================================================
+🌐 Endereços Web (Acessos)
+pgAdmin (Banco SQL Web): http://localhost:5050
+
+FastAPI (Documentação do Backend): [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+💻 Comandos do Terminal
+1. Banco de Dados (Docker / pgAdmin)
+Subir o container do pgAdmin:
+
+Bash
+docker-compose up -d
+Verificar containers ativos:
+
+Bash
+docker ps
+2. Backend (FastAPI / Uvicorn)
+Entrar na pasta do backend:
+
+Bash
+cd backend
+Iniciar o servidor da API (com recarregamento automático):
+
+Bash
+uvicorn main:app --reload
