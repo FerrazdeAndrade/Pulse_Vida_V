@@ -1,0 +1,280 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Fundo com sobreposição suave e imagem de fundo */
+  background: linear-gradient(rgba(244, 247, 246, 0.88), rgba(244, 247, 246, 0.88)), url('fundo_login.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  zoom: 0.88; 
+}
+
+header {
+  background-color: whitesmoke;
+  padding: 15px 40px;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
+  color: blue;
+}
+
+nav {
+  background-color: rgb(221, 221, 221);
+  padding: 8px 18px;
+  border-radius: 35px;
+  word-spacing: 10px;
+}
+
+nav > a {
+  color: blue;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  background-color: #99cdf8;
+  color: rgb(0, 17, 255);
+}
+
+.pulse {
+  text-decoration: none;
+  color: blue;
+  font-weight: bold;
+}
+
+.pulse:hover {
+  color: rgb(63, 176, 228);
+}
+
+/* Container Principal e Grid Lado a Lado */
+.container {
+  padding: 20px 30px;
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.titulo {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.painel-grid {
+  display: flex;
+  gap: 25px;
+  align-items: flex-start;
+}
+
+/* Estilização dos Cards */
+.card-formulario, .card-lista {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  border: 1px solid #e1e8ed;
+  box-sizing: border-box;
+  margin-bottom: 25px;
+}
+
+.card-formulario h3, .card-lista h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Caixa de aviso da unidade */
+.unidade-texto {
+  margin-bottom: 15px;
+  font-size: 13px;
+  color: #555;
+  background: #f1f5f9;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #007bff;
+}
+
+/* Formulários e Inputs */
+form label, .card-formulario label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 4px;
+  margin-top: 10px;
+}
+
+form input, .card-formulario input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+form input:focus, .card-formulario input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+}
+
+.input-readonly {
+  background-color: #f8fafc !important;
+  color: #718096 !important;
+}
+
+.linha-dupla, .form-dupla {
+  display: flex;
+  gap: 10px;
+}
+
+/* Botões do Formulário */
+.botoes-form, .form-botoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+form button, .btn-agendar {
+  flex: 2;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+form button:hover, .btn-agendar:hover {
+  background-color: #0056b3;
+}
+
+.btn-limpar {
+  flex: 1;
+  padding: 12px;
+  background-color: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-limpar:hover {
+  background-color: #cbd5e0;
+}
+
+/* Seção da Lista e Acordeão */
+.card-lista-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #f1f3f5;
+  user-select: none;
+}
+
+.badge-contador, .badge {
+  background: #e1effe;
+  color: #007bff;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.seta-toggle, .seta-acordeao {
+  font-size: 14px;
+  color: #666;
+  font-weight: bold;
+}
+
+.card-lista-conteudo, .lista-conteudo {
+  margin-top: 15px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+#listaAgendamentos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#listaAgendamentos li, .item-salvo, .item-agendamento {
+  background: #fdfefe;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  border-left: 4px solid #28a745;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-detalhes p {
+  margin: 2px 0;
+}
+
+button.btn-excluir {
+  background-color: #fff5f5;
+  color: #e53e3e;
+  border: 1px solid #fed7d7;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+button.btn-excluir:hover {
+  background-color: #fed7d7;
+}
+
+/* Botão Flutuante */
+.btn-flutuante {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.btn-flutuante:hover {
+  transform: scale(1.08);
+}

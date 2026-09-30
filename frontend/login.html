@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Css/login.css" onerror="this.href='login.css'">
+  <title>PulseVida - Login</title>
+  <style>
+    /* Estilos essenciais garantidos para o layout funcionar na hora */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      background-color: #f4f7f6;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    .imagem-lateral {
+      flex: 1;
+      background-image: url('../imagens/doutora1.avif');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .login-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 20px;
+    }
+    .login-container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .login-container button:hover {
+      background: #0056b3;
+    }
+    .cadastro-link {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+    .cadastro-link a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .password-container {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .password-container input {
+      width: 100%;
+      padding-right: 45px !important;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      background: none !important;
+      border: none !important;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Lado esquerdo com a imagem da médica -->
+  <div class="imagem-lateral"></div>
+
+  <!-- Lado direito com o formulário de login -->
+  <div class="login-wrapper">
+    <div class="login-container">
+      <div class="logo-container" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+        <img src="../imagens/logo_pulsevida.png" alt="PulseVida" style="height: 40px;" onerror="this.style.display='none'">
+        <h2 style="color: #d9534f; margin: 0;">PulseVida ❤️</h2>
+      </div>
+
+      <h2>Login</h2>
+
+      <form id="formLogin">
+        <input type="text" id="loginUsuario" placeholder="Usuário" autocomplete="off" required>
+        
+        <!-- Campo de senha com o ícone de alternar -->
+        <div class="password-container">
+          <input type="password" id="loginSenha" placeholder="Senha" autocomplete="current-password" required>
+          <span id="btnToggleSenha" class="toggle-password" onclick="toggleSenha()">👁️</span>
+        </div>
+
+        <button type="submit">Entrar</button>
+      </form>
+
+      <!-- Link para recuperar a senha -->
+      <p class="cadastro-link" style="margin-top: 10px;">
+        <a href="recuperar_senha.html">Esqueci a senha?</a>
+      </p>
+
+      <p class="cadastro-link">
+        Não tem conta? <a href="tela_cadastro.html">Cadastrar</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Botão Flutuante no Canto Inferior Direito para Retornar à Página Principal -->
+  <a href="index.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 12px 18px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; gap: 8px; font-family: Arial, sans-serif;">
+    ⬅ Início
+  </a>
+
+<script>
+  function toggleSenha() {
+    const inputSenha = document.getElementById("loginSenha");
+    const spanToggle = document.getElementById("btnToggleSenha");
+
+    if (inputSenha.type === "password") {
+      inputSenha.type = "text";
+      spanToggle.textContent = "🙈";
+    } else {
+      inputSenha.type = "password";
+      spanToggle.textContent = "👁️";
+    }
+  }
+
+  document.getElementById("formLogin").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const usuarioDigitado = document.getElementById("loginUsuario").value.trim();
+    const senhaDigitada = document.getElementById("loginSenha").value;
+
+    const usuariosCadastrados = JSON.parse(localStorage.getItem("usuariosCadastrados")) || [];
+
+    const usuarioEncontrado = usuariosCadastrados.find(user => 
+      user.usuario === usuarioDigitado && user.senha === senhaDigitada
+    );
+
+    if (usuarioEncontrado) {
+      localStorage.setItem("logado", "true");
+      localStorage.setItem("usuarioAtivo", usuarioEncontrado.usuario);
+      
+      document.getElementById("formLogin").reset();
+
+      alert("Login realizado com sucesso!");
+      window.location.href = "aba_c.html";
+    } else {
+      alert("Usuário ou senha incorretos, ou conta não cadastrada!");
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="Css/global.css">
+
+<title>Dashboard</title>
+</head>
+
+<body>
+
+<header>
+  <a class="pulse" href="index.html"><h1>PulseVida ❤️</h1></a>
+
+  <nav>
+    <a href="aba_a.html">Solicitar</a>
+    <a href="aba_b.html">Solicitações</a>
+    <a href="aba_c.html">Agendamento</a>
+    <a href="aba_d.html">Recomendações</a>
+    <a href="#" onclick="logout()">Sair</a>
+  </nav>
+</header>
+
+<h1 style="text-align:center;">Bem-vindo</h1>
+<h2 style="text-align:center;" id="user"></h2>
+
+<script>
+if (localStorage.getItem("logado") !== "true") {
+  window.location.href = "login.html";
+}
+
+document.getElementById("user").innerText =
+  "Olá, " + localStorage.getItem("usuario");
+
+function logout() {
+  localStorage.removeItem("logado");
+  localStorage.removeItem("usuario");
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

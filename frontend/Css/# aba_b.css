@@ -1,0 +1,101 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: white;
+  margin: 0px 0px;
+  background-size: cover;
+  zoom: 0.75;
+  
+}
+
+header {
+  background-color: whitesmoke;
+  padding: 20px;
+  margin: 0px 0px;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 0px 10px;
+  gap: 700px;
+  color: blue;
+}
+
+nav > a {
+  color: blue;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+nav :hover {
+  background-color: #99cdf8;
+  text-decoration: none;
+  color: rgb(0, 17, 255);
+  padding: 20px;
+  border-radius: 25px;
+  font-size: 25px;
+}
+
+.titulo {
+  text-align: center;
+  font-size: 50px;
+  border-radius: 20px;
+  
+}
+
+nav {
+  background-color: rgb(221, 221, 221);
+  padding: 20px;
+  border-radius: 35px;
+  word-spacing: 10px;
+
+}
+
+/* ===== CARD DAS SOLICITAÇÕES ===== */
+.card {
+  background: white;
+  padding: 20px;
+  margin: 15px auto;
+  width: 350px;
+  border-radius: 15px;
+
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+
+  text-align: left;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+/* textos */
+.card p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+/* botão */
+.card button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+}
+
+.card button:hover {
+  background-color: darkred;
+}
+
+.pulse {
+  text-decoration: none;
+  color: blue;
+}
+
+.pulse:hover {
+  color: rgb(63, 176, 228);
+  text-decoration: none;
+
+}

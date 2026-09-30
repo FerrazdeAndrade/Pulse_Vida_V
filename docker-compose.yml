@@ -1,0 +1,38 @@
+services:
+  postgres_db:
+    image: postgres:15-alpine
+    container_name: pulse_postgres
+    environment:
+      POSTGRES_USER: pulse_user
+      POSTGRES_PASSWORD: pulse_password
+      POSTGRES_DB: pulse_vida_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/database.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mongo_db:
+    image: mongo:6.0
+    container_name: pulse_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pulse_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    restart: always
+
+volumes:
+  pgdata:
+  mongodata:

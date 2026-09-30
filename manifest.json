@@ -1,0 +1,8 @@
+{
+  "name": "Pulse Vida",
+  "short_name": "PulseVida",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2aa7fa"
+}

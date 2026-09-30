@@ -1,0 +1,95 @@
+
+/* ===== LAYOUT GERAL DA TELA DE LOGIN ===== */
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  background-color: #f4f7f6;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* ===== LADO ESQUERDO: IMAGEM DE FUNDO/ILUSTRAÇÃO ===== */
+.imagem-lateral {
+  flex: 1; /* Ocupa metade da tela */
+  background-image: url('../imagens/doutora1.avif'); /* Caminho corrigido subindo um nível */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ===== LADO DIREITO: FORMULÁRIO DE LOGIN ===== */
+.login-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+/* Caixa do formulário */
+.login-container {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.logo-container h2 {
+  color: #d9534f;
+  margin-bottom: 5px;
+}
+
+.login-container h2 {
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 24px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-container button:hover {
+  background: #0056b3;
+}
+
+.cadastro-link {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.cadastro-link a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.cadastro-link a:hover {
+  text-decoration: underline;
+}

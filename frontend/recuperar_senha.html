@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Css/login.css">
+  <title>PulseVida - Recuperar Senha</title>
+</head>
+<body>
+
+  <!-- Lado esquerdo com a imagem da médica -->
+  <div class="imagem-lateral"></div>
+
+  <!-- Lado direito com o formulário -->
+  <div class="login-wrapper">
+    <div class="login-container">
+      <div class="logo-container">
+        <h2>PulseVida ❤️️</h2>
+      </div>
+
+      <h2>Recuperar Senha</h2>
+
+      <form id="formRecuperar">
+        <input type="text" id="usuarioRecuperar" placeholder="Digite seu Usuário ou Nome" autocomplete="off" required>
+        <input type="password" id="novaSenha" placeholder="Digite a Nova Senha" autocomplete="new-password" required>
+        <button type="submit">Atualizar Senha</button>
+      </form>
+
+      <p class="cadastro-link">
+        Lembrou da senha? <a href="login.html">Entrar</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("formRecuperar").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const usuarioInput = document.getElementById("usuarioRecuperar").value.trim().toLowerCase();
+      const novaSenhaInput = document.getElementById("novaSenha").value.trim();
+
+      // Busca todos os utilizadores guardados no navegador
+      let usuariosCadastrados = JSON.parse(localStorage.getItem("usuariosCadastrados")) || [];
+
+      if (usuariosCadastrados.length === 0) {
+        alert("Erro: Não existem contas registadas no navegador!");
+        return;
+      }
+
+      // Procura o índice do utilizador varrendo QUALQUER campo do objeto guardado
+      let indexUsuario = -1;
+      for (let i = 0; i < usuariosCadastrados.length; i++) {
+        const user = usuariosCadastrados[i];
+        // Verifica se algum dos valores dentro do objeto do utilizador corresponde ao que foi digitado
+        const encontrou = Object.values(user).some(valor => 
+          typeof valor === 'string' && valor.trim().toLowerCase() === usuarioInput
+        );
+        if (encontrou) {
+          indexUsuario = i;
+          break;
+        }
+      }
+
+      if (indexUsuario !== -1) {
+        // Atualiza a palavra-passe/senha do utilizador encontrado
+        usuariosCadastrados[indexUsuario].senha = novaSenhaInput;
+        
+        // Guarda de volta no localStorage
+        localStorage.setItem("usuariosCadastrados", JSON.stringify(usuariosCadastrados));
+
+        alert("Palavra-passe redefinida com sucesso! Faça login com a nova senha.");
+        window.location.href = "login.html";
+      } else {
+        // Mostra um alerta detalhado com o que existe no localStorage para sabermos o nome exato
+        const listaContas = usuariosCadastrados.map(u => JSON.stringify(u)).join(" | ");
+        alert("Utilizador não encontrado!\n\nContas detetadas no sistema:\n" + listaContas);
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="global.css" onerror="this.href='style.css'">
+<title>Solicitações</title>
+<style>
+  /* Grade com 4 colunas por linha */
+  #listaSolicitacoes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    list-style: none;
+    padding: 0 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 1200px) {
+    #listaSolicitacoes {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    #listaSolicitacoes {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  #listaSolicitacoes li {
+    display: flex;
+  }
+
+  /* Cards menores e mais compactos */
+  #listaSolicitacoes .card {
+    width: 100%;
+    background: #ffffff;
+    padding: 14px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 13px; /* Fonte reduzida para otimizar espaço */
+  }
+
+  #listaSolicitacoes .card p {
+    margin: 4px 0; /* Diminui a distância entre as linhas de texto */
+  }
+
+  .titulo {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+</style>
+</head>
+
+<body>
+<script>
+if (localStorage.getItem("logado") !== "true") {
+  window.location.href = "../login.html";
+}
+</script>
+
+<header>
+  <a class="pulse" href="../index.html"><h1>PulseVida ❤️</h1></a>
+    <nav>
+      <a href="../aba_a.html">Solicitar</a>
+      <a href="aba_b.html">Solicitações</a>
+      <a href="../aba_c.html">Agendamento</a>
+      <a href="../aba_d.html">Recomendações</a>
+    </nav>
+</header>
+
+<h1 class="titulo">Solicitações em andamento</h1>
+
+<div class="textos">
+  <ul id="listaSolicitacoes"></ul>
+</div>
+
+<!-- Botão Flutuante no Canto Inferior Direito para Retornar à Página Principal -->
+<a href="../index.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 12px 18px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; gap: 8px; font-family: Arial, sans-serif;">
+  ⬅ Início
+</a>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  let lista = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+  let ul = document.getElementById("listaSolicitacoes");
+
+  function renderizar() {
+    ul.innerHTML = "";
+
+    if (lista.length === 0) {
+      ul.innerHTML = "<li style='grid-column: 1 / -1; text-align: center; padding: 20px;'>Nenhuma solicitação encontrada</li>";
+      return;
+    }
+
+    lista.forEach((s, index) => {
+      let li = document.createElement("li");
+      let pressaoFormatada = "-";
+
+      if (s.pressao) {
+        let partes = s.pressao.split("/");
+        if (partes.length === 2) {
+          let sistolica = parseInt(partes[0]);
+          let diastolica = parseInt(partes[1]);
+          pressaoFormatada = `${sistolica}/${diastolica} mmHg`;
+        }
+      }
+
+      let nomeExibicao = s.nome || s.nomePaciente || "-";
+      let problemaExibicao = s.problema || s.especialidade || s.servico || "-";
+      let unidadeExibicao = s.hospital ? `Unidade: ${s.hospital}` : `${s.rua || "-"}, ${s.numero || "-"} - ${s.bairro || "-"}, ${s.cidade || "-"}`;
+
+      li.innerHTML = `
+        <div class="card">
+          <div>
+            <p><strong>Nome:</strong> ${nomeExibicao}</p>
+            <p><strong>Idade/CPF:</strong> ${s.idade || s.cpf || "-"}</p>
+            <p><strong>Pressão:</strong> ${pressaoFormatada}</p>
+            <p><strong>Detalhes:</strong> ${unidadeExibicao}</p>
+            <p><strong>Problema/Serviço:</strong> ${problemaExibicao}</p>
+            ${s.dataConsulta ? `<p><strong>Data/Hora:</strong> ${s.dataConsulta} às ${s.horarioConsulta || ""}</p>` : ""}
+          </div>
+          <button onclick="excluir(${index})" style="background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 12px;">❌ Excluir</button>
+        </div>
+      `;
+
+      ul.appendChild(li);
+    });
+  }
+
+  window.excluir = function(index) {
+    if (confirm("Deseja excluir esta solicitação?")) {
+      lista.splice(index, 1);
+      localStorage.setItem("solicitacoes", JSON.stringify(lista));
+      renderizar();
+    }
+  }
+
+  renderizar();
+});
+</script>
+
+</body>
+</html>

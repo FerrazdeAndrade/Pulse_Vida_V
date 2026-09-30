@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Css/Cadastro.css">
+    <title>Cadastro</title>
+</head>
+<body>
+    <div class="cadastro-container">
+        <h2>Criar Conta</h2>
+        
+        <!-- Removido o action="cadastro.php" e adicionado um ID para o formulário -->
+        <form id="formCadastro">
+            <input type="text" id="usuario" placeholder="Usuário" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="senha" placeholder="Senha" required>
+            <input type="text" id="cpf" placeholder="CPF" maxlength="14" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" oninput="formatarCPF(this)" title="O número do CPF deve ter 11 dígitos" required>
+            <input type="text" id="sus" placeholder="Número do SUS" maxlength="15" oninput="formatarSUS(this)" pattern="\d{15}" title="O número do SUS deve ter 15 dígitos" required>         
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+<script>
+    function formatarSUS(campo) {
+        let valor = campo.value.replace(/\D/g, "");
+        valor = valor.substring(0, 15);
+        campo.value = valor;
+    }
+
+    function formatarCPF(campo) {
+        let valor = campo.value;
+        valor = valor.replace(/\D/g, "");
+        valor = valor.substring(0, 11);
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        campo.value = valor;
+    }
+
+    // Intercepta o envio do formulário para salvar os dados no navegador sem dar erro 405
+    document.getElementById("formCadastro").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const usuario = document.getElementById("usuario").value;
+        const email = document.getElementById("email").value;
+        const senha = document.getElementById("senha").value;
+        const cpf = document.getElementById("cpf").value;
+        const sus = document.getElementById("sus").value;
+
+        const novoUsuario = { usuario, email, senha, cpf, sus };
+
+        // Salvando temporariamente no localStorage para testes
+        let usuarios = JSON.parse(localStorage.getItem("usuariosCadastrados")) || [];
+        usuarios.push(novoUsuario);
+        localStorage.setItem("usuariosCadastrados", JSON.stringify(usuarios));
+
+        alert("Cadastro realizado com sucesso!");
+        
+        // Redireciona para a tela de login
+        window.location.href = "login.html";
+    });
+</script>
+</body>
+</html>

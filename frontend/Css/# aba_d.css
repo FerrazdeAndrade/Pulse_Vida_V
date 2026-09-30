@@ -1,0 +1,59 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: white;
+  margin: 0px 0px;
+  background-size: cover;
+  zoom: 0.75; 
+}
+
+header {
+  background-color: whitesmoke;
+  padding: 20px;
+  margin: 0px 0px;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 0px 10px;
+  gap: 700px;
+  color: blue;
+}
+
+/* ESTILO DA LOGO AUMENTADA */
+header img {
+  height: 150px; /* Aumente ou diminua este valor conforme preferir */
+  width: auto;
+  object-fit: contain;
+}
+
+nav :hover {
+  background-color: #99cdf8;
+  text-decoration: none;
+  color: rgb(0, 17, 255);
+  padding: 20px;
+  border-radius: 25px;
+  font-size: 25px;
+}
+
+nav {
+  background-color: rgb(221, 221, 221);
+  padding: 20px;
+  border-radius: 35px;
+  word-spacing: 10px;
+}
+
+nav > a {
+  color: blue;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.pulse {
+  text-decoration: none;
+  color: blue;
+}
+
+.pulse:hover {
+  color: rgb(63, 176, 228);
+  text-decoration: none;
+}

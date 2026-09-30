@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Css/style.css">
+  <title>Pulse Vida</title>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+  <!-- LOGO -->
+  <a href="index.html" class="logo">
+    <img src="../imagens/logo_pulsevida.png" alt="PulseVida" style="height: 40px;">
+  </a>
+
+  <!-- MENU DE NAVEGAÇÃO -->
+  <nav style="display: flex; gap: 20px; align-items: center;">
+    <a href="aba_a.html" style="text-decoration: none; color: #333; font-weight: bold;">Solicitar</a>
+    <a href="aba_b.html" style="text-decoration: none; color: #333; font-weight: bold;">Solicitações</a>
+    <a href="aba_c.html" style="text-decoration: none; color: #333; font-weight: bold;">Agendamento</a>
+    <a href="aba_d.html" style="text-decoration: none; color: #333; font-weight: bold;">Recomendações</a>
+    <a href="hospitais_saquarema.html" style="text-decoration: none; color: #333; font-weight: bold;">Hospitais de Saquarema</a>
+  </nav>
+
+  <!-- ÁREA LOGIN -->
+  <div class="area-login" style="display: flex; align-items: center; gap: 10px;">
+    <span class="texto-login" style="font-size: 14px; color: #666;">Conecte-se aqui</span>
+    <a href="login.html" class="btn-login" style="background: #007bff; color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none; font-weight: bold;">Login</a>
+  </div>
+</header>
+
+<!-- ===== TOPO ===== -->
+<section class="container">
+  <div class="slider">
+    <button class="seta" onclick="mudarSlide(-1)">⬅</button>
+
+    <div class="slides">
+      <div class="slide ativo">
+        <h2>PulseVida: Cuidando da sua saúde</h2>
+        <p>
+          O PulseVida é uma solução digital desenvolvida para auxiliar no monitoramento da saúde,
+          com foco em pessoas que convivem com hipertensão. O sistema permite registrar a pressão
+          arterial e acompanhar sua evolução ao longo do tempo.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h2>Saúde em Saquarema</h2>
+        <p>
+          Em Saquarema – RJ, muitas pessoas enfrentam dificuldades no acompanhamento da saúde.
+          A falta de monitoramento pode agravar doenças silenciosas como a hipertensão.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h2>Como o PulseVida ajuda</h2>
+        <p>
+          O aplicativo oferece funcionalidades como registro de pressão, localização de hospitais
+          e solicitação de auxílio, promovendo prevenção e acesso mais rápido à saúde.
+        </p>
+      </div>
+    </div>
+
+    <button class="seta" onclick="mudarSlide(1)">➡</button>
+  </div>
+
+  <div class="imagem">
+    <img id="imgSlide" src="../imagens/doutora1.avif" alt="Profissional de saúde">
+  </div>
+</section>
+
+<!-- ===== BOTÃO DE EMERGÊNCIA - HIPERTENSOS (SAQUAREMA) ===== -->
+<section style="padding: 10px 20px; display: flex; justify-content: center;">
+  <div class="card-formulario" style="text-align: center; width: 100%; max-width: 600px; background: #fff3f3; border-left: 4px solid #d9534f; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+    <h2 style="color: #d9534f; margin-top: 0;">⚠️ Urgência Hipertensão - Saquarema</h2>
+    <p style="color: #555;">Atendimento de emergência direcionado aos 3 hospitais de referência para residentes em Saquarema.</p>
+    <button id="btnHipertensos" style="background-color: #d9534f; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px;">
+      Emergência Hipertensos (Saquarema)
+    </button>
+  </div>
+</section>
+
+<!-- ===== FUNCIONALIDADES ===== -->
+<section class="info">
+  <h2>Funcionalidades</h2>
+
+  <div class="cards">
+    <!-- Card Monitoramento -->
+    <a href="aba_a.html" class="card-link" style="text-decoration: none; color: inherit;">
+      <div class="card">
+        <div class="icone">📊</div>
+        <h3>Monitoramento</h3>
+        <p>Controle contínuo da pressão arterial e histórico do usuário.</p>
+      </div>
+    </a>
+
+    <!-- Card Localização -->
+    <a href="https://www.google.com/maps/search/hospitais+e+unidades+de+saude+Saquarema+RJ" target="_blank" class="card-link" style="text-decoration: none; color: inherit;">
+      <div class="card">
+        <div class="icone">📍</div>
+        <h3>Localização</h3>
+        <p>Encontre hospitais e unidades de saúde próximos rapidamente no Maps.</p>
+      </div>
+    </a>
+
+    <!-- Card Agendamento -->
+    <div class="card card-interativo">
+      <div class="icone">📅</div>
+      <h3>Agendamento</h3>
+      <p>Organize consultas informando a unidade de atendimento:</p>
+      
+      <label for="hospital" style="font-size: 13px; color: #555; display: block; margin-top: 8px; text-align: left; font-weight: bold;">Unidade:</label>
+      <select id="hospital" required style="width: 100%; padding: 8px; margin-top: 4px; margin-bottom: 8px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; box-sizing: border-box;">
+        <option value="" disabled selected>-- Clique aqui para escolher --</option>
+        <option value="Hospital Municipal Porphirio Nunes de Azeredo - R. Adolfo Bravo, s/n - Bacaxá, Saquarema - RJ">
+          Hospital Municipal Porphirio Nunes de Azeredo (Bacaxá)
+        </option>
+        <option value="Hospital Municipal Nossa Senhora de Nazareth - R. O Lto Verde, 259 - Verde Vale, Saquarema - RJ">
+          Hospital Municipal Nossa Senhora de Nazareth (Verde Vale)
+        </option>
+        <option value="Hospital Estadual dos Lagos Nossa Senhora de Nazareth - R. Manoel Domingos dos Santos, 725 - Barreira, Saquarema - RJ">
+          Hospital Estadual dos Lagos Nossa Senhora de Nazareth (Barreira)
+        </option>
+      </select>
+      
+      <button onclick="irParaAgendamento()" style="margin-top: 8px; width: 100%; padding: 8px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+        Avançar Agendamento
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BENEFÍCIOS ===== -->
+<section class="info">
+  <h2>Benefícios</h2>
+
+  <div class="cards">
+    <div class="card">
+      <div class="icone">⚡</div>
+      <h3>Rapidez</h3>
+      <p>Facilita o acesso a atendimento médico em situações urgentes.</p>
+    </div>
+
+    <div class="card">
+      <div class="icone">❤️</div>
+      <h3>Prevenção</h3>
+      <p>Ajuda a evitar complicações com acompanhamento constante.</p>
+    </div>
+
+    <div class="card">
+      <div class="icone">📱</div>
+      <h3>Acessível</h3>
+      <p>Interface simples para uso por pessoas de todas as idades.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOBRE ===== -->
+<section class="sobre-container">
+  <div class="sobre-texto">
+    <h2>Sobre o Projeto</h2>
+    <p>
+      O PulseVida é uma iniciativa voltada à melhoria da saúde da população de Saquarema – RJ, 
+      com foco específico no monitoramento e controle da hipertensão arterial. Considerando que 
+      a hipertensão é uma doença silenciosa e de alto risco, o sistema foi desenvolvido para auxiliar 
+      os usuários no acompanhamento contínuo da pressão arterial, permitindo o registro frequente 
+      das medições e a visualização do histórico de saúde.
+
+      Além disso, o aplicativo incentiva a prevenção e o autocuidado, ajudando os usuários a adotarem 
+      hábitos mais saudáveis e a identificarem possíveis alterações nos níveis de pressão.
+    </p>
+  </div>
+
+  <div class="sobre-img">
+    <img src="../imagens/saquarema.avif" alt="Paisagem de Saquarema">
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-contato">
+      <h3>Para mais informações</h3>
+      <p>Entre em contato com a nossa equipe</p>
+
+      <p class="whatsapp">
+        <img src="../icons/whatsapp.png" alt="WhatsApp">
+        <a href="https://wa.me/5522992049923" target="_blank" style="color: white; text-decoration: none;">(22) 99204-9923</a>
+      </p>
+
+      <p class="email">
+        <img src="../icons/email.png" alt="E-mail">
+        <a href="mailto:saude@saquarema.rj.gov.br" style="color: white; text-decoration: none;">saude@saquarema.rj.gov.br</a>
+      </p>
+
+      <p class="ouvidoria" style="margin-top: 10px; font-size: 14px;">
+        <strong>Ouvidoria Geral do Município:</strong><br>
+        Telefone: <a href="tel:552226556401" style="color: white; text-decoration: none;">(22) 2655-6401</a><br>
+        E-mail: <a href="mailto:ouvidoria@saquarema.rj.gov.br" style="color: white; text-decoration: none;">ouvidoria@saquarema.rj.gov.br</a><br>
+        <small style="opacity: 0.8;">(Atendimento de segunda a sexta, das 09h às 17h)</small>
+      </p>
+    </div>
+
+    <div class="footer-centro">
+      <img src="../imagens/qrcode_pulse_vida.png" alt="QR Code do PulseVida" style="width: 150px; height: 150px;">
+      <img src="../imagens/logo_saquarema.avif" alt="Prefeitura de Saquarema">
+      <p>Prefeitura de Saquarema | R. Cel. Madureira, 77 - Centro, Saquarema - RJ</p>
+    </div>
+  </div>
+
+  <button id="btnTopo" onclick="voltarTopo()">⬆</button>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+let slideAtual = 0;
+
+const imagens = [
+  "../imagens/doutora1.avif",
+  "../imagens/doutora2.avif",
+  "../imagens/doutora3.avif"
+];
+
+function mudarSlide(direcao) {
+  const slides = document.querySelectorAll(".slide");
+  const img = document.getElementById("imgSlide");
+
+  slides[slideAtual].classList.remove("ativo");
+  slideAtual = (slideAtual + direcao + slides.length) % slides.length;
+  slides[slideAtual].classList.add("ativo");
+
+  img.style.opacity = 0;
+  setTimeout(() => {
+    img.src = imagens[slideAtual];
+    img.style.opacity = 1;
+  }, 200);
+}
+
+function voltarTopo() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+window.addEventListener("scroll", () => {
+  const btn = document.getElementById("btnTopo");
+  if (btn) {
+    btn.style.opacity = window.scrollY > 200 ? "1" : "0";
+  }
+});
+
+document.getElementById("btnHipertensos").addEventListener("click", function() {
+  const residente = confirm("Confirma que é residente no município de Saquarema - RJ e necessita de atendimento de emergência para hipertensão?");
+  if (residente) {
+    window.location.href = "hospitais_saquarema.html";
+  } else {
+    alert("Este serviço de emergência rápida é exclusivo para residentes em Saquarema.");
+  }
+});
+
+function irParaAgendamento() {
+  const selectHospital = document.getElementById("hospital");
+  const hospital = selectHospital.value;
+  
+  if (!hospital) {
+    alert("Por favor, selecione um hospital antes de prosseguir.");
+    return;
+  }
+
+  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+  const novaSolicitacao = {
+    id: Date.now(),
+    hospital: hospital,
+    status: "Em andamento",
+    data: new Date().toLocaleDateString('pt-BR')
+  };
+
+  solicitacoes.push(novaSolicitacao);
+  localStorage.setItem("solicitacoes", JSON.stringify(solicitacoes));
+  window.location.href = "aba_c.html";
+}
+</script>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Css/style.css">
+  <title>PulseVida - Hospitais de Saquarema</title>
+</head>
+<body>
+
+<!-- ===== HEADER CORRIGIDO (Com Seta de Voltar e Logo Centralizado) ===== -->
+<header style="display: flex; align-items: center; justify-content: space-between; padding: 15px 30px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative;">
+  <!-- Botão de Voltar -->
+  <a href="index.html" style="text-decoration: none; font-size: 20px; font-weight: bold; color: #007bff; display: flex; align-items: center; gap: 5px;">
+    ⬅ <span style="font-size: 14px;">Voltar</span>
+  </a>
+
+  <!-- Logo Centralizado e Maior -->
+  <div style="position: absolute; left: 50%; transform: translateX(-50%);">
+    <a href="index.html" class="logo">
+      <img src="../imagens/logo_pulsevida.png" alt="PulseVida" style="height: 55px;">
+    </a>
+  </div>
+
+  <!-- Espaço vazio para manter o equilíbrio visual do flexbox -->
+  <div></div>
+</header>
+
+<main style="padding: 30px; max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif;">
+  <h2 style="color: #d9534f; text-align: center;">Hospitais de Emergência para Hipertensos</h2>
+  <p style="text-align: center; color: #555; margin-bottom: 30px;">Selecione a unidade de atendimento de referência em Saquarema:</p>
+
+  <!-- Hospital 1 -->
+  <div style="background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid #d9534f;">
+    <h3>Hospital Municipal Porphirio Nunes de Azeredo</h3>
+    <p><strong>Endereço:</strong> R. Adolfo Bravo, s/n - Bacaxá, Saquarema - RJ, 28993-000</p>
+    <button onclick="escolherHospital('Hospital Municipal Porphirio Nunes de Azeredo')" style="background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">Selecionar Unidade</button>
+  </div>
+
+  <!-- Hospital 2 -->
+  <div style="background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid #d9534f;">
+    <h3>Hospital Municipal Nossa Senhora de Nazareth</h3>
+    <p><strong>Endereço:</strong> R. O Lto Verde, 259 - Verde Vale, Saquarema - RJ, 28990-000</p>
+    <button onclick="escolherHospital('Hospital Municipal Nossa Senhora de Nazareth')" style="background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">Selecionar Unidade</button>
+  </div>
+
+  <!-- Hospital 3 -->
+  <div style="background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid #d9534f;">
+    <h3>Hospital Estadual dos Lagos Nossa Senhora de Nazareth</h3>
+    <p><strong>Endereço:</strong> R. Manoel Domingos dos Santos, 725 - Barreira, Saquarema - RJ, 28990-000</p>
+    <button onclick="escolherHospital('Hospital Estadual dos Lagos Nossa Senhora de Nazareth')" style="background: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">Selecionar Unidade</button>
+  </div>
+</main>
+
+<script>
+function escolherHospital(nome) {
+  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+  solicitacoes.push({
+    id: Date.now(),
+    hospital: nome,
+    tipo: "Urgência Hipertensão - Saquarema",
+    data: new Date().toLocaleDateString('pt-BR')
+  });
+  localStorage.setItem("solicitacoes", JSON.stringify(solicitacoes));
+  
+  alert("Unidade selecionada com sucesso: " + nome);
+  window.location.href = "aba_c.html";
+}
+</script>
+
+</body>
+</html>

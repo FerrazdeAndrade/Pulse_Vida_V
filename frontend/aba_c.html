@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseVida - Agendamento</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f6;
+      margin: 0;
+      padding: 0;
+      zoom: 0.85;
+    }
+
+    header {
+      background-color: whitesmoke;
+      padding: 15px 40px;
+      font-size: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+      color: blue;
+    }
+
+    nav {
+      background-color: rgb(221, 221, 221);
+      padding: 10px 20px;
+      border-radius: 35px;
+      word-spacing: 10px;
+    }
+
+    nav > a {
+      color: blue;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 10px 15px;
+      border-radius: 20px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #99cdf8;
+      color: rgb(0, 17, 255);
+    }
+
+    .pulse {
+      text-decoration: none;
+      color: blue;
+      font-weight: bold;
+    }
+
+    .pulse:hover {
+      color: rgb(63, 176, 228);
+    }
+
+    /* Container Principal */
+    main {
+      padding: 20px 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h2.titulo-principal {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    /* Layout Lado a Lado (Flexbox) */
+    .painel-grid {
+      display: flex;
+      gap: 25px;
+      align-items: flex-start;
+    }
+
+    /* Colunas Form e Lista */
+    .card-formulario, .card-lista {
+      flex: 1;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    .card-formulario h3, .card-lista-cabecalho h3 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .unidade-texto {
+      margin-bottom: 15px;
+      font-size: 13px;
+      color: #555;
+      background: #f1f3f5;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 4px solid #007bff;
+    }
+
+    /* Inputs do Formulário */
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #007bff;
+    }
+
+    .input-readonly {
+      background-color: #f1f3f5;
+      color: #495057;
+    }
+
+    .linha-dupla {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Botões do Formulário */
+    .botoes-form {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button.btn-limpar {
+      flex: 1;
+      padding: 12px;
+      background-color: #e2e8f0;
+      color: #4a5568;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button.btn-limpar:hover {
+      background-color: #cbd5e0;
+    }
+
+    button.btn-agendar {
+      flex: 2;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button.btn-agendar:hover {
+      background-color: #0056b3;
+    }
+
+    /* Seção Acordeão (Abrir/Fechar) dos Agendamentos Salvos */
+    .card-lista-cabecalho {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f1f3f5;
+      user-select: none;
+    }
+
+    .badge-contador {
+      background: #e1effe;
+      color: #007bff;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+    .seta-toggle {
+      font-size: 14px;
+      color: #666;
+      font-weight: bold;
+    }
+
+    .card-lista-conteudo {
+      margin-top: 15px;
+      max-height: 430px;
+      overflow-y: auto;
+    }
+
+    /* Estilo dos itens salvos */
+    .item-salvo {
+      background: #f9f9f9;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      border-left: 4px solid #28a745;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .item-detalhes p {
+      margin: 2px 0;
+    }
+
+    button.btn-excluir {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+      transition: background 0.2s;
+    }
+
+    button.btn-excluir:hover {
+      background-color: #bd2130;
+    }
+
+    /* Botão Flutuante (Início) */
+    .btn-flutuante {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
+
+    .btn-flutuante:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <!-- Corrigido para apontar corretamente para a raiz dependendo de onde está o arquivo -->
+  <a class="pulse" href="index.html"><h1>PulseVida ❤️</h1></a>
+  <nav>
+    <a href="aba_a.html">Solicitar</a>
+    <a href="aba_b.html">Solicitações</a>
+    <a href="aba_c.html">Agendamento</a>
+    <a href="aba_d.html">Recomendações</a>
+  </nav>
+</header>
+
+<main>
+  <h2 class="titulo-principal">Painel de Agendamentos</h2>
+
+  <!-- Container Lado a Lado -->
+  <div class="painel-grid">
+    
+    <!-- COLUNA DA ESQUERDA: Formulário -->
+    <div class="card-formulario">
+      <h3>Nova Consulta</h3>
+      
+      <p id="unidadeSelecionadaTexto" class="unidade-texto">
+        Unidade: Carregando...
+      </p>
+
+      <label>NOME PACIENTE:</label>
+      <input type="text" id="nomePaciente" placeholder="Nome completo">
+
+      <label>CPF:</label>
+      <input type="text" id="cpfPaciente" placeholder="000.000.000-00">
+
+      <label>Nº SUS:</label>
+      <input type="text" id="susPaciente" placeholder="Cartão do SUS">
+
+      <label>ESPECIALIDADE:</label>
+      <input type="text" id="especialidade" value="Hipertensão" readonly class="input-readonly">
+
+      <label>NOME MÉDICO:</label>
+      <input type="text" id="nomeMedico" placeholder="Médico responsável">
+
+      <div class="linha-dupla">
+        <div style="flex: 1;">
+          <label>DATA:</label>
+          <input type="date" id="dataConsulta">
+        </div>
+        <div style="flex: 1;">
+          <label>HORÁRIO:</label>
+          <input type="time" id="horarioConsulta">
+        </div>
+      </div>
+
+      <div class="botoes-form">
+        <button type="button" onclick="limparFormulario()" class="btn-limpar">🔄 Limpar</button>
+        <button type="button" onclick="realizarAgendamento()" class="btn-agendar">Agendar Consulta</button>
+      </div>
+    </div>
+
+    <!-- COLUNA DA DIREITA: Agendamentos Salvos com Acordeão -->
+    <div class="card-lista">
+      <div onclick="toggleAgendamentos()" class="card-lista-cabecalho">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <h3>Agendamentos Salvos</h3>
+          <span id="contadorBadge" class="badge-contador">0</span>
+        </div>
+        <span id="iconeSeta" class="seta-toggle">▲</span>
+      </div>
+
+      <div id="containerAgendamentos" class="card-lista-conteudo">
+        <div id="listaAgendamentos"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Botão Flutuante corrigido para voltar ao index -->
+<a href="index.html" class="btn-flutuante" title="Voltar ao Início">
+  ➜
+</a>
+
+<script>
+window.onload = function() {
+  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+  
+  if(solicitacoes.length > 0) {
+    let ultima = solicitacoes[solicitacoes.length - 1];
+    const elem = document.getElementById("unidadeSelecionadaTexto");
+    if(elem) {
+      elem.innerHTML = "Unidade: <strong>" + (ultima.hospital || "Unidade Principal (Saquarema)") + "</strong>";
+    }
+  } else {
+    const elem = document.getElementById("unidadeSelecionadaTexto");
+    if(elem) {
+      elem.innerHTML = "Unidade: <strong>Unidade Principal (Saquarema)</strong>";
+    }
+  }
+  
+  atualizarLista();
+};
+
+function toggleAgendamentos() {
+  const container = document.getElementById("containerAgendamentos");
+  const seta = document.getElementById("iconeSeta");
+
+  if (container.style.display === "none") {
+    container.style.display = "block";
+    seta.innerText = "▲";
+  } else {
+    container.style.display = "none";
+    seta.innerText = "▼";
+  }
+}
+
+function limparFormulario() {
+  document.getElementById("nomePaciente").value = "";
+  document.getElementById("cpfPaciente").value = "";
+  document.getElementById("susPaciente").value = "";
+  document.getElementById("nomeMedico").value = "";
+  document.getElementById("dataConsulta").value = "";
+  document.getElementById("horarioConsulta").value = "";
+}
+
+function realizarAgendamento() {
+  const nome = document.getElementById("nomePaciente").value;
+  const cpf = document.getElementById("cpfPaciente").value;
+  const sus = document.getElementById("susPaciente").value;
+  const especialidade = document.getElementById("especialidade").value;
+  const medico = document.getElementById("nomeMedico").value;
+  const data = document.getElementById("dataConsulta").value;
+  const horario = document.getElementById("horarioConsulta").value;
+
+  if (!nome || !cpf || !sus || !medico || !data || !horario) {
+    alert("Por favor, preencha todos os campos do formulário.");
+    return;
+  }
+
+  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+
+  let novoAgendamento = {
+    nomePaciente: nome,
+    cpf: cpf,
+    sus: sus,
+    especialidade: especialidade,
+    nomeMedico: medico,
+    dataConsulta: data,
+    horarioConsulta: horario,
+    status: "Agendado",
+    hospital: "Unidade Principal (Saquarema)"
+  };
+
+  solicitacoes.push(novoAgendamento);
+  localStorage.setItem("solicitacoes", JSON.stringify(solicitacoes));
+
+  alert("Consulta agendada e salva com sucesso!");
+  
+  limparFormulario();
+  atualizarLista();
+}
+
+function atualizarLista() {
+  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+  const container = document.getElementById("listaAgendamentos");
+  container.innerHTML = "";
+
+  let temAgendamento = false;
+  let totalValidos = 0;
+
+  solicitacoes.forEach((item, index) => {
+    if(item.nomePaciente) {
+      temAgendamento = true;
+      totalValidos++;
+      
+      let dataFormatada = item.dataConsulta;
+      if (item.dataConsulta && item.dataConsulta.includes("-")) {
+        let partes = item.dataConsulta.split("-");
+        if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+      }
+
+      container.innerHTML += `
+        <div class="item-salvo">
+          <div class="item-detalhes">
+            <p><strong>${item.nomePaciente}</strong></p>
+            <p>SUS: ${item.sus} | Dr(a). ${item.nomeMedico}</p>
+            <p>📅 ${dataFormatada} às ${item.horarioConsulta}</p>
+          </div>
+          <button onclick="excluirAgendamento(${index})" class="btn-excluir">Excluir</button>
+        </div>
+      `;
+    }
+  });
+
+  document.getElementById("contadorBadge").innerText = totalValidos;
+
+  if (!temAgendamento) {
+    container.innerHTML = "<p style='color: #666; text-align: center; margin: 20px 0; font-size: 13px;'>Nenhum agendamento salvo.</p>";
+  }
+}
+
+function excluirAgendamento(index) {
+  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
+  
+  if (confirm("Tem certeza que deseja excluir este agendamento?")) {
+    solicitacoes.splice(index, 1);
+    localStorage.setItem("solicitacoes", JSON.stringify(solicitacoes));
+    atualizarLista();
+  }
+}
+</script>
+
+</body>
+</html>
