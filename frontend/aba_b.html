@@ -3,149 +3,318 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="global.css" onerror="this.href='style.css'">
+<link rel="stylesheet" href="css/aba_b.css">
 <title>Solicitações</title>
 <style>
-  /* Grade com 4 colunas por linha */
-  #listaSolicitacoes {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    list-style: none;
-    padding: 0 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 1200px) {
-    #listaSolicitacoes {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 768px) {
-    #listaSolicitacoes {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  #listaSolicitacoes li {
-    display: flex;
-  }
-
-  /* Cards menores e mais compactos */
-  #listaSolicitacoes .card {
-    width: 100%;
-    background: #ffffff;
-    padding: 14px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    border: 1px solid #ddd;
-    box-sizing: border-box;
+  body {
+    background-image: url('/imagens/Fundo1.jpg');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    font-size: 13px; /* Fonte reduzida para otimizar espaço */
+    min-height: 100vh;
+    align-items: center;
   }
 
-  #listaSolicitacoes .card p {
-    margin: 4px 0; /* Diminui a distância entre as linhas de texto */
+  /* Barra Inferior Direita com Início e Logo de Saquarema */
+  .sidebar-inferior {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
   }
 
-  .titulo {
+  .sidebar-inferior img {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .btn-inicio {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 25px;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  .btn-inicio:hover {
+    background-color: #0056b3;
+  }
+
+  /* Conteúdo Principal Centralizado */
+  .conteudo-principal {
+    width: 100%;
+    max-width: 1100px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header {
     text-align: center;
     margin-bottom: 25px;
+    width: 100%;
+  }
+
+  /* Título Principal com Logo integrada de forma limpa */
+  h1.pulse-titulo {
+    font-size: 52px;
+    color: #d90429;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 0;
+  }
+
+  .logo-topo {
+    height: 75px;
+    vertical-align: middle;
+  }
+
+  nav {
+    margin-top: 20px;
+  }
+
+  nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #222;
+    font-weight: bold;
+    font-size: 22px;
+  }
+
+  nav a:hover {
+    color: #d90429;
+  }
+
+  .titulo-secao {
+    font-size: 36px;
+    color: #111;
+    text-align: center;
+    margin: 25px 0;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  /* Grid de Cards (5 por página) com bordas vermelhas */
+  .grid-tabelas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1000px;
+    width: 100%;
+  }
+
+  .tabela-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 3px solid #d90429;
+    border-radius: 10px;
+    padding: 15px;
+    width: 280px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+  }
+
+  .tabela-card p {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .btn-excluir {
+    background-color: #d90429;
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .btn-excluir:hover {
+    background-color: #b7031f;
+  }
+
+  .paginacao {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .paginacao button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .paginacao button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 </style>
 </head>
 
 <body>
+
+  <script>
+    if (localStorage.getItem("logado") !== "true") {
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <!-- Botão Início e Logo de Saquarema no canto inferior direito -->
+  <div class="sidebar-inferior">
+    <a href="index.html" class="btn-inicio">Início</a>
+    <img src="/imagens/logo_saquarema.avif" alt="Logo Saquarema">
+  </div>
+
+  <div class="conteudo-principal">
+    <header>
+      <div>
+        <h1 class="pulse-titulo">
+          <img src="/imagens/logo_pulsevida.png" alt="Logo PulseVida" class="logo-topo"> 
+          PulseVida ❤️
+        </h1>
+      </div>
+      <nav>
+        <a href="aba_a.html">Solicitar</a>
+        <a href="aba_b.html">Solicitações</a>
+        <a href="aba_c.html">Agendamento</a>
+        <a href="aba_d.html">Recomendações</a>
+      </nav>
+    </header>
+
+    <h1 class="titulo-secao">SOLICITAÇÕES & AGENDAMENTOS SALVOS</h1>
+
+    <div class="grid-tabelas" id="listaSolicitacoes">
+      <!-- Os cartões preenchidos de 5 em 5 aparecerão aqui dinamicamente -->
+    </div>
+
+    <div class="paginacao" id="controlesPaginacao" style="display:none;">
+      <button id="btnAnterior" onclick="mudarPagina(-1)">Anterior</button>
+      <span id="infoPagina" style="font-weight: bold; font-size: 18px;"></span>
+      <button id="btnProximo" onclick="mudarPagina(1)">Próximo</button>
+    </div>
+  </div>
+
 <script>
-if (localStorage.getItem("logado") !== "true") {
-  window.location.href = "../login.html";
-}
-</script>
+let todosAgendamentos = [];
+let paginaAtual = 1;
+const itensPorPagina = 5;
 
-<header>
-  <a class="pulse" href="../index.html"><h1>PulseVida ❤️</h1></a>
-    <nav>
-      <a href="../aba_a.html">Solicitar</a>
-      <a href="aba_b.html">Solicitações</a>
-      <a href="../aba_c.html">Agendamento</a>
-      <a href="../aba_d.html">Recomendações</a>
-    </nav>
-</header>
-
-<h1 class="titulo">Solicitações em andamento</h1>
-
-<div class="textos">
-  <ul id="listaSolicitacoes"></ul>
-</div>
-
-<!-- Botão Flutuante no Canto Inferior Direito para Retornar à Página Principal -->
-<a href="../index.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 12px 18px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; gap: 8px; font-family: Arial, sans-serif;">
-  ⬅ Início
-</a>
-
-<script>
 document.addEventListener("DOMContentLoaded", () => {
-
-  let lista = JSON.parse(localStorage.getItem("solicitacoes")) || [];
-  let ul = document.getElementById("listaSolicitacoes");
-
-  function renderizar() {
-    ul.innerHTML = "";
-
-    if (lista.length === 0) {
-      ul.innerHTML = "<li style='grid-column: 1 / -1; text-align: center; padding: 20px;'>Nenhuma solicitação encontrada</li>";
-      return;
-    }
-
-    lista.forEach((s, index) => {
-      let li = document.createElement("li");
-      let pressaoFormatada = "-";
-
-      if (s.pressao) {
-        let partes = s.pressao.split("/");
-        if (partes.length === 2) {
-          let sistolica = parseInt(partes[0]);
-          let diastolica = parseInt(partes[1]);
-          pressaoFormatada = `${sistolica}/${diastolica} mmHg`;
-        }
-      }
-
-      let nomeExibicao = s.nome || s.nomePaciente || "-";
-      let problemaExibicao = s.problema || s.especialidade || s.servico || "-";
-      let unidadeExibicao = s.hospital ? `Unidade: ${s.hospital}` : `${s.rua || "-"}, ${s.numero || "-"} - ${s.bairro || "-"}, ${s.cidade || "-"}`;
-
-      li.innerHTML = `
-        <div class="card">
-          <div>
-            <p><strong>Nome:</strong> ${nomeExibicao}</p>
-            <p><strong>Idade/CPF:</strong> ${s.idade || s.cpf || "-"}</p>
-            <p><strong>Pressão:</strong> ${pressaoFormatada}</p>
-            <p><strong>Detalhes:</strong> ${unidadeExibicao}</p>
-            <p><strong>Problema/Serviço:</strong> ${problemaExibicao}</p>
-            ${s.dataConsulta ? `<p><strong>Data/Hora:</strong> ${s.dataConsulta} às ${s.horarioConsulta || ""}</p>` : ""}
-          </div>
-          <button onclick="excluir(${index})" style="background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 12px;">❌ Excluir</button>
-        </div>
-      `;
-
-      ul.appendChild(li);
-    });
-  }
-
-  window.excluir = function(index) {
-    if (confirm("Deseja excluir esta solicitação?")) {
-      lista.splice(index, 1);
-      localStorage.setItem("solicitacoes", JSON.stringify(lista));
-      renderizar();
-    }
-  }
-
-  renderizar();
+  carregarDoServidor();
 });
+
+async function carregarDoServidor() {
+  try {
+    const resposta = await fetch('http://localhost:3000/api/agendamentos');
+    todosAgendamentos = await resposta.json();
+    paginaAtual = 1;
+    renderizarPagina();
+  } catch (err) {
+    console.error("Erro ao buscar dados do servidor:", err);
+    document.getElementById("listaSolicitacoes").innerHTML = "<p style='color: red; font-weight: bold; font-size: 18px;'>Erro ao conectar com o servidor Node.js.</p>";
+  }
+}
+
+function renderizarPagina() {
+  const container = document.getElementById("listaSolicitacoes");
+  const divPaginacao = document.getElementById("controlesPaginacao");
+  container.innerHTML = "";
+
+  if (todosAgendamentos.length === 0) {
+    container.innerHTML = "<p style='font-size: 20px; font-weight: bold; color: #333;'>Nenhuma solicitação ou agendamento encontrado.</p>";
+    divPaginacao.style.display = "none";
+    return;
+  }
+
+  divPaginacao.style.display = "flex";
+
+  let totalPaginas = Math.ceil(todosAgendamentos.length / itensPorPagina);
+  if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
+  if (paginaAtual < 1) paginaAtual = 1;
+
+  let inicio = (paginaAtual - 1) * itensPorPagina;
+  let fim = inicio + itensPorPagina;
+  let itensPagina = todosAgendamentos.slice(inicio, fim);
+
+  itensPagina.forEach((s) => {
+    let nome = s.paciente || s.nome || s.nomePaciente || "-";
+    let cpf = s.cpf ? `CPF: ${s.cpf}` : "";
+    let sus = s.sus ? `SUS: ${s.sus}` : "";
+    let especialidade = s.especialidade || s.problema || "-";
+    let medico = s.nomeMedico || s.hospital || "-";
+    
+    let dataFormatada = s.data || "";
+    if (dataFormatada.includes("-")) {
+      let partes = dataFormatada.split("-");
+      if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+    let horario = s.horario || s.horarioConsulta || "--:--";
+
+    let cardDiv = document.createElement("div");
+    cardDiv.className = "tabela-card";
+    cardDiv.innerHTML = `
+      <p><strong>Paciente:</strong> ${nome}</p>
+      <p><strong>${sus}</strong></p>
+      <p><strong>${cpf}</strong></p>
+      <p><strong>Especialidade:</strong> ${especialidade}</p>
+      <p><strong>Médico/Local:</strong> ${medico}</p>
+      <p><strong>Data/Hora:</strong> ${dataFormatada} às ${horario}</p>
+      <button class="btn-excluir" onclick="excluirDoServidor('${s.id}')">❌ Excluir</button>
+    `;
+    container.appendChild(cardDiv);
+  });
+
+  document.getElementById("infoPagina").innerText = `Página ${paginaAtual} de ${totalPaginas}`;
+  document.getElementById("btnAnterior").disabled = (paginaAtual === 1);
+  document.getElementById("btnProximo").disabled = (paginaAtual === totalPaginas);
+}
+
+function mudarPagina(direcao) {
+  paginaAtual += direcao;
+  renderizarPagina();
+}
+
+async function excluirDoServidor(id) {
+  if (confirm("Deseja excluir este agendamento do servidor?")) {
+    try {
+      const resposta = await fetch(`http://localhost:3000/api/agendamentos/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (resposta.ok) {
+        carregarDoServidor();
+      } else {
+        alert("Erro ao excluir no servidor.");
+      }
+    } catch (err) {
+      console.error("Erro de conexão:", err);
+    }
+  }
+}
 </script>
 
 </body>

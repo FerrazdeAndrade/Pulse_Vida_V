@@ -1,4 +1,7 @@
-// 1. Registra o Service Worker ao carregar a página
+// ==========================================
+// 1. REGISTRO DO SERVICE WORKER E PUSH NOTIFICATIONS
+// ==========================================
+
 if ('serviceWorker' in navigator && 'PushManager' in window) {
   // Caminho corrigido para relativo para evitar erros de escopo e loops
   navigator.serviceWorker.register('sw.js')
@@ -9,7 +12,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     .catch(err => console.error('Erro ao registrar o Service Worker:', err));
 }
 
-// 2. Configura o botão de notificações (procura pelo ID btn-subscribe)
+// Configura o botão de notificações (procura pelo ID btn-subscribe)
 function configurarBotao(registration) {
   const btn = document.getElementById('btn-subscribe');
 
@@ -36,7 +39,7 @@ function configurarBotao(registration) {
   });
 }
 
-// 3. Realiza a inscrição do usuário nas Push Notifications
+// Realiza a inscrição do usuário nas Push Notifications
 async function inscreverUsuario(registration) {
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
@@ -55,4 +58,33 @@ function urlBase64ToUint8Array(base64String) {
 
   const raw = atob(base64);
   return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+}
+
+
+// ==========================================
+// 2. GERENCIAMENTO DE LOGIN E REDIRECIONAMENTO DE PERFIS
+// ==========================================
+
+function processarLogin(tipo, nomeDoMedico = "Dr(a). Responsável") {
+  // Validação do login do médico conforme solicitado
+  if (tipo === "medico") {
+    localStorage.setItem("logado", "true");
+    localStorage.setItem("usuarioAtivo", "medico");
+    localStorage.setItem("nomeMedico", nomeDoMedico);
+    window.location.href = "painel_medico.html";
+    return;
+  }
+  
+  // Exemplo para Administrador ou Paciente
+  if (tipo === "admin") {
+    localStorage.setItem("logado", "true");
+    localStorage.setItem("usuarioAtivo", "admin");
+    window.location.href = "index.html";
+    return;
+  }
+
+  // Padrão para Paciente
+  localStorage.setItem("logado", "true");
+  localStorage.setItem("usuarioAtivo", "paciente");
+  window.location.href = "index.html";
 }

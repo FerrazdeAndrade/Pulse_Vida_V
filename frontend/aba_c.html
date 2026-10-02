@@ -353,23 +353,9 @@
 </a>
 
 <script>
+// Carrega os agendamentos do Servidor Node.js ao abrir a página
 window.onload = function() {
-  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
-  
-  if(solicitacoes.length > 0) {
-    let ultima = solicitacoes[solicitacoes.length - 1];
-    const elem = document.getElementById("unidadeSelecionadaTexto");
-    if(elem) {
-      elem.innerHTML = "Unidade: <strong>" + (ultima.hospital || "Unidade Principal (Saquarema)") + "</strong>";
-    }
-  } else {
-    const elem = document.getElementById("unidadeSelecionadaTexto");
-    if(elem) {
-      elem.innerHTML = "Unidade: <strong>Unidade Principal (Saquarema)</strong>";
-    }
-  }
-  
-  atualizarLista();
+  carregarAgendamentosDoServidor();
 };
 
 function toggleAgendamentos() {
@@ -394,7 +380,8 @@ function limparFormulario() {
   document.getElementById("horarioConsulta").value = "";
 }
 
-function realizarAgendamento() {
+// Salvar agendamento direto no Servidor Node.js
+async function realizarAgendamento() {
   const nome = document.getElementById("nomePaciente").value;
   const cpf = document.getElementById("cpfPaciente").value;
   const sus = document.getElementById("susPaciente").value;
@@ -408,78 +395,104 @@ function realizarAgendamento() {
     return;
   }
 
-  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
-
-  let novoAgendamento = {
-    nomePaciente: nome,
+  const novoAgendamento = {
+    paciente: nome,
     cpf: cpf,
     sus: sus,
     especialidade: especialidade,
     nomeMedico: medico,
-    dataConsulta: data,
-    horarioConsulta: horario,
-    status: "Agendado",
+    data: data,
+    horario: horario,
     hospital: "Unidade Principal (Saquarema)"
   };
 
-  solicitacoes.push(novoAgendamento);
-  localStorage.setItem("solicitacoes", JSON.stringify(solicitacoes));
+  try {
+    const resposta = await fetch('http://localhost:3000/api/agendamentos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(novoAgendamento)
+    });
 
-  alert("Consulta agendada e salva com sucesso!");
-  
-  limparFormulario();
-  atualizarLista();
-}
-
-function atualizarLista() {
-  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
-  const container = document.getElementById("listaAgendamentos");
-  container.innerHTML = "";
-
-  let temAgendamento = false;
-  let totalValidos = 0;
-
-  solicitacoes.forEach((item, index) => {
-    if(item.nomePaciente) {
-      temAgendamento = true;
-      totalValidos++;
-      
-      let dataFormatada = item.dataConsulta;
-      if (item.dataConsulta && item.dataConsulta.includes("-")) {
-        let partes = item.dataConsulta.split("-");
-        if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
-      }
-
-      container.innerHTML += `
-        <div class="item-salvo">
-          <div class="item-detalhes">
-            <p><strong>${item.nomePaciente}</strong></p>
-            <p>SUS: ${item.sus} | Dr(a). ${item.nomeMedico}</p>
-            <p>📅 ${dataFormatada} às ${item.horarioConsulta}</p>
-          </div>
-          <button onclick="excluirAgendamento(${index})" class="btn-excluir">Excluir</button>
-        </div>
-      `;
+    if (resposta.ok) {
+      alert("Consulta agendada e salva no servidor com sucesso!");
+      limparFormulario();
+      carregarAgendamentosDoServidor();
+    } else {
+      alert("Erro ao salvar agendamento no servidor.");
     }
-  });
-
-  document.getElementById("contadorBadge").innerText = totalValidos;
-
-  if (!temAgendamento) {
-    container.innerHTML = "<p style='color: #666; text-align: center; margin: 20px 0; font-size: 13px;'>Nenhum agendamento salvo.</p>";
+  } catch (err) {
+    console.error("Erro de conexão:", err);
+    alert("Não foi possível conectar ao servidor Node.js.");
   }
 }
 
-function excluirAgendamento(index) {
-  let solicitacoes = JSON.parse(localStorage.getItem("solicitacoes")) || [];
-  
+// Buscar lista de agendamentos diretamente do Servidor Node.js
+async function carregarAgendamentosDoServidor() {
+  try {
+    const resposta = await fetch('http://localhost:3000/api/agendamentos');
+    const solicitacoes = await resposta.json();
+    
+    const container = document.getElementById("listaAgendamentos");
+    container.innerHTML = "";
+
+    let totalValidos = solicitacoes.length;
+
+    if (totalValidos === 0) {
+      container.innerHTML = "<p style='color: #666; text-align: center; margin: 20px 0; font-size: 13px;'>Nenhum agendamento salvo.</p>";
+    } else {
+      solicitacoes.forEach((item) => {
+        let dataFormatada = item.data || "";
+        if (dataFormatada.includes("-")) {
+          let partes = dataFormatada.split("-");
+          if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+
+        // Suporta tanto o formato do agendamentos.html quanto do aba_c.html
+        let nomeP = item.paciente || item.nomePaciente || "Paciente";
+        let medP = item.nomeMedico || item.hospital || "Geral";
+        let horaP = item.horario || item.horarioConsulta || "--:--";
+        let susP = item.sus || "N/A";
+
+        container.innerHTML += `
+          <div class="item-salvo">
+            <div class="item-detalhes">
+              <p><strong>${nomeP}</strong></p>
+              <p>SUS: ${susP} | Médico/Local: ${medP}</p>
+              <p>📅 ${dataFormatada} às ${horaP}</p>
+            </div>
+            <button onclick="excluirAgendamento('${item.id}')" class="btn-excluir">Excluir</button>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById("contadorBadge").innerText = totalValidos;
+  } catch (err) {
+    console.error("Erro ao buscar agendamentos:", err);
+  }
+}
+
+// Excluir agendamento diretamente do Servidor Node.js pela rota DELETE
+async function excluirAgendamento(id) {
   if (confirm("Tem certeza que deseja excluir este agendamento?")) {
-    solicitacoes.splice(index, 1);
-    localStorage.setItem("solicitacoes", JSON.stringify(solicitacoes));
-    atualizarLista();
+    try {
+      const resposta = await fetch(`http://localhost:3000/api/agendamentos/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (resposta.ok) {
+        carregarAgendamentosDoServidor();
+      } else {
+        alert("Não foi possível excluir o agendamento no servidor.");
+      }
+    } catch (err) {
+      console.error("Erro de conexão ao excluir:", err);
+      alert("Erro ao conectar com o servidor para exclusão.");
+    }
   }
 }
 </script>
+
 
 </body>
 </html>

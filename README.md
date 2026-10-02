@@ -129,3 +129,9 @@ Iniciar o servidor da API (com recarregamento automático):
 
 Bash
 uvicorn main:app --reload
+============================================================================
+##Clique com o botão direito na pasta backend (ou no arquivo server.js).
+##Selecione "Abrir no Terminal Integrado".   
+##Basta digitar o comando abaixo e apertar 
+#(node server.js)
+#RESULTADO(node server.js:Servidor rodando na porta 3000)
