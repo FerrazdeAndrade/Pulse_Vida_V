@@ -18,7 +18,7 @@
 <header style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
   <!-- LOGO -->
   <a href="index.html" class="logo">
-    <img src="/imagens/logo_pulsevida.png" alt="PulseVida" style="height: 40px;">
+    <img src="/frontend/imagens/logo_pulsevida.png" alt="PulseVida" style="height: 40px;">
   </a>
 
   <!-- MENU DE NAVEGAÇÃO -->
@@ -75,7 +75,7 @@
   </div>
 
   <div class="imagem">
-    <img id="imgSlide" src="/imagens/doutora1.avif" alt="Profissional de saúde">
+    <img id="imgSlide" src="/frontend/imagens/doutora1.avif" alt="Profissional de saúde">
   </div>
 </section>
 
@@ -84,9 +84,11 @@
   <div class="card-formulario" style="text-align: center; width: 100%; max-width: 600px; background: #fff3f3; border-left: 4px solid #d9534f; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
     <h2 style="color: #d9534f; margin-top: 0;">⚠️ Urgência Hipertensão - Saquarema</h2>
     <p style="color: #555;">Atendimento de emergência direcionado aos 3 hospitais de referência para residentes em Saquarema.</p>
-    <button id="btnHipertensos" style="background-color: #d9534f; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px;">
+    
+    <!-- Transformado em link (<a>) direcionando para hospitais_saquarema.html -->
+    <a href="hospitais_saquarema.html" style="display: inline-block; background-color: #d9534f; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 15px; margin-top: 10px;">
       Emergência Hipertensos (Saquarema)
-    </button>
+    </a>
   </div>
 </section>
 
@@ -179,7 +181,7 @@
   </div>
 
   <div class="sobre-img">
-    <img src="/imagens/saquarema.avif" alt="Paisagem de Saquarema">
+    <img src="/frontend/imagens/saquarema.avif" alt="Paisagem de Saquarema">
   </div>
 </section>
 
@@ -228,12 +230,12 @@
       <p>Entre em contato com a nossa equipe</p>
 
       <p class="whatsapp">
-        <img src="/icons/whatsapp.png" alt="WhatsApp">
+        <img src="icons/whatsapp.png" alt="WhatsApp">
         <a href="https://wa.me/5522992049923" target="_blank" style="color: white; text-decoration: none;">(22) 99204-9923</a>
       </p>
 
       <p class="email">
-        <img src="/icons/email.png" alt="E-mail">
+        <img src="icons/email.png" alt="E-mail">
         <a href="mailto:saude@saquarema.rj.gov.br" style="color: white; text-decoration: none;">saude@saquarema.rj.gov.br</a>
       </p>
 
@@ -246,17 +248,65 @@
     </div>
 
     <div class="footer-centro">
-      <img src="/imagens/qrcode_pulse_vida.png" alt="QR Code do PulseVida" style="width: 150px; height: 150px;">
-      <img src="/imagens/logo_saquarema.avif" alt="Prefeitura de Saquarema">
+      <img src="/frontend/imagens/qrcode_pulse_vida.png" alt="QR Code do PulseVida" style="width: 150px; height: 150px;">
+  
+      <!-- Adicionamos a classe 'logo-prefeitura' aqui -->
+      <img src="/frontend/imagens/logo_saquarema.avif" alt="Prefeitura de Saquarema" class="logo-prefeitura" style="width: 500px; height: 200px;">
+  >
+  
       <p>Prefeitura de Saquarema | R. Cel. Madureira, 77 - Centro, Saquarema - RJ</p>
     </div>
-  </div>
 
   <button id="btnTopo" onclick="voltarTopo()">⬆</button>
 </footer>
 
 <!-- ===== SCRIPTS ===== -->
 <script>
+  // ===== CONTROLE DO CARROSSEL DE SLIDES E IMAGENS =====
+  let slideAtual = 0;
+
+  // Lista com os caminhos das imagens correspondentes a cada slide
+  const imagensSlides = [
+    "/frontend/imagens/doutora1.avif",
+    "/frontend/imagens/doutora2.avif",
+    "/frontend/imagens/doutora3.avif"
+  ];
+
+  function mudarSlide(direcao) {
+    const slides = document.querySelectorAll(".slide");
+    const imgElemento = document.getElementById("imgSlide");
+    
+    if (slides.length === 0) return;
+
+    // Remove a classe ativo do slide atual
+    slides[slideAtual].classList.remove("ativo");
+    
+    // Atualiza o índice do slide
+    slideAtual += direcao;
+    
+    // Faz o loop infinito (se passar do último, volta pro primeiro e vice-versa)
+    if (slideAtual >= slides.length) {
+      slideAtual = 0;
+    } else if (slideAtual < 0) {
+      slideAtual = slides.length - 1;
+    }
+    
+    // Adiciona a classe ativo no novo slide
+    slides[slideAtual].classList.add("ativo");
+
+    // Altera a imagem correspondente, se o elemento existir na tela
+    if (imgElemento && imagensSlides[slideAtual]) {
+      imgElemento.src = imagensSlides[slideAtual];
+    }
+  }
+
+  // Transição automática a cada 5 segundos (opcional)
+  setInterval(() => {
+    mudarSlide(1);
+  }, 5000);
+
+
+  // ===== AGENDAMENTO E PAINEL ADMINISTRATIVO =====
   async function realizarAgendamentoUnico() {
     const nome = document.getElementById("pacienteNome").value;
     const hospital = document.getElementById("hospital").value;
@@ -299,42 +349,51 @@
     const logado = localStorage.getItem("logado");
 
     if (logado === "true" && usuarioAtivo === "admin") {
-      document.getElementById("painelAdmin").classList.add("ativo");
+      const painel = document.getElementById("painelAdmin");
+      if (painel) painel.classList.add("ativo");
       
       try {
         const res = await fetch('http://localhost:3000/api/agendamentos');
         const agendamentos = await res.json();
         
-        document.getElementById("totalAgendamentos").textContent = agendamentos.length;
+        const totalEl = document.getElementById("totalAgendamentos");
+        if (totalEl) totalEl.textContent = agendamentos.length;
+
         const tbody = document.getElementById("tabelaCorpoAdmin");
-        tbody.innerHTML = "";
+        if (tbody) {
+          tbody.innerHTML = "";
 
-        if (agendamentos.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#777;">Nenhum agendamento registrado.</td></tr>`;
-          return;
+          if (agendamentos.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#777;">Nenhum agendamento registrado.</td></tr>`;
+            return;
+          }
+
+          agendamentos.forEach(item => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${item.id}</td>
+              <td>${item.paciente}</td>
+              <td>${item.hospital}</td>
+              <td>${item.data}</td>
+              <td><span style="color: green; font-weight: bold;">${item.status}</span></td>
+            `;
+            tbody.appendChild(tr);
+          });
         }
-
-        agendamentos.forEach(item => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.paciente}</td>
-            <td>${item.hospital}</td>
-            <td>${item.data}</td>
-            <td><span style="color: green; font-weight: bold;">${item.status}</span></td>
-          `;
-          tbody.appendChild(tr);
-        });
       } catch (e) {
-        document.getElementById("statusServidor").textContent = "Offline";
-        document.getElementById("statusServidor").style.color = "red";
+        const statusServidor = document.getElementById("statusServidor");
+        if (statusServidor) {
+          statusServidor.textContent = "Offline";
+          statusServidor.style.color = "red";
+        }
       }
     }
   }
 
   function fazerLogoutAdmin() {
     localStorage.clear();
-    document.getElementById("painelAdmin").classList.remove("ativo");
+    const painel = document.getElementById("painelAdmin");
+    if (painel) painel.classList.remove("ativo");
     alert("Logout realizado!");
   }
 

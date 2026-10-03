@@ -11,12 +11,15 @@
   <title>PulseVida - Portal do Médico</title>
 </head>
 
-<body style="background-color: #f4f6f9; font-family: Arial, sans-serif; margin: 0; padding: 0;">
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-image: url('imagens/Fundo2.jpg'); background-size: cover; background-position: center; background-attachment: fixed; position: relative; min-height: 100vh;">
+
+<!-- Camada translúcida para melhorar a legibilidade sobre o fundo -->
+<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(244, 246, 249, 0.90); z-index: -1;"></div>
 
 <!-- ===== HEADER DO MÉDICO ===== -->
-<header style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative; z-index: 10;">
   <a href="index.html" class="logo">
-    <img src="/imagens/logo_pulsevida.png" alt="PulseVida" style="height: 40px;">
+    <img src="imagens/logo_pulsevida.png" alt="PulseVida" style="height: 40px;">
   </a>
 
   <div style="display: flex; align-items: center; gap: 15px;">
@@ -26,7 +29,7 @@
 </header>
 
 <!-- ===== CONTEÚDO PRINCIPAL: PAINEL DO MÉDICO ===== -->
-<main style="padding: 30px; max-width: 1200px; margin: 0 auto;">
+<main style="padding: 30px; max-width: 1200px; margin: 0 auto; padding-bottom: 80px; position: relative; z-index: 10;">
   
   <div style="margin-bottom: 25px;">
     <h1 style="color: #007bff; margin: 0 0 5px 0;">Portal do Médico - Atendimento e Triagem</h1>
@@ -73,8 +76,13 @@
 
 </main>
 
+<!-- ===== LOGO DE SAQUAREMA MAIOR NO CANTO INFERIOR DIREITO ===== -->
+<div style="position: fixed; bottom: 15px; right: 20px; z-index: 1000; background: rgba(255, 255, 255, 0.9); padding: 10px 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+  <img src="imagens/logo_saquarema.avif" alt="Logo Saquarema" style="height: 70px; object-fit: contain; display: block;">
+</div>
+
 <!-- ===== MODAL SIMPLES PARA PRONTUÁRIO / OBSERVAÇÕES ===== -->
-<div id="modalProntuario" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+<div id="modalProntuario" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000;">
   <div style="background: #fff; padding: 30px; border-radius: 8px; width: 100%; max-width: 500px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
     <h3 id="tituloProntuario" style="margin-top: 0; color: #007bff;">Prontuário do Paciente</h3>
     
@@ -95,7 +103,6 @@
 <script>
   let pacienteSelecionadoId = null;
 
-  // Verifica se o usuário logado é realmente médico ao carregar a página
   window.addEventListener("DOMContentLoaded", () => {
     const logado = localStorage.getItem("logado");
     const usuarioAtivo = localStorage.getItem("usuarioAtivo");
@@ -144,14 +151,13 @@
         tbody.appendChild(tr);
       });
 
-    }	 catch (err) {
+    }  catch (err) {
       console.error("Erro:", err);
       document.getElementById("statusServidorMedico").textContent = "Offline (Node.js)";
       document.getElementById("statusServidorMedico").style.color = "red";
     }
   }
 
-  // ===== NOVA FUNÇÃO: DELETAR AGENDAMENTO E ATUALIZAR LISTA =====
   async function deletarAgendamento(id) {
     if (!confirm(`Deseja realmente excluir o agendamento ID ${id}?`)) {
       return;
@@ -167,8 +173,6 @@
       }
 
       alert("Agendamento excluído com sucesso!");
-      
-      // Atualiza a lista automaticamente após a exclusão
       carregarAgendamentosMedico();
 
     } catch (err) {

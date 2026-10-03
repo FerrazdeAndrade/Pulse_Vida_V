@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="css/aba_b.css">
-<title>Solicitações</title>
+<title>PulseVida - Solicitações</title>
 <style>
   body {
-    background-image: url('/imagens/Fundo1.jpg');
+    background-image: url('imagens/Fundo1.jpg');
     background-size: cover;
     background-position: center;
     margin: 0;
@@ -18,7 +18,6 @@
     align-items: center;
   }
 
-  /* Barra Inferior Direita com Início e Logo de Saquarema */
   .sidebar-inferior {
     position: fixed;
     bottom: 20px;
@@ -51,7 +50,6 @@
     background-color: #0056b3;
   }
 
-  /* Conteúdo Principal Centralizado */
   .conteudo-principal {
     width: 100%;
     max-width: 1100px;
@@ -67,7 +65,6 @@
     width: 100%;
   }
 
-  /* Título Principal com Logo integrada de forma limpa */
   h1.pulse-titulo {
     font-size: 52px;
     color: #d90429;
@@ -108,7 +105,6 @@
     text-transform: uppercase;
   }
 
-  /* Grid de Cards (5 por página) com bordas vermelhas */
   .grid-tabelas {
     display: flex;
     flex-wrap: wrap;
@@ -177,29 +173,23 @@
 
 <body>
 
-  <script>
-    if (localStorage.getItem("logado") !== "true") {
-      window.location.href = "login.html";
-    }
-  </script>
-
   <!-- Botão Início e Logo de Saquarema no canto inferior direito -->
   <div class="sidebar-inferior">
     <a href="index.html" class="btn-inicio">Início</a>
-    <img src="/imagens/logo_saquarema.avif" alt="Logo Saquarema">
+    <img src="imagens/logo_saquarema.avif" alt="Logo Saquarema">
   </div>
 
   <div class="conteudo-principal">
     <header>
       <div>
         <h1 class="pulse-titulo">
-          <img src="/imagens/logo_pulsevida.png" alt="Logo PulseVida" class="logo-topo"> 
-          PulseVida ❤️
+          <img src="imagens/logo_pulsevida.png" alt="Logo PulseVida" class="logo-topo"> 
+          PulseVida ❤
         </h1>
       </div>
       <nav>
         <a href="aba_a.html">Solicitar</a>
-        <a href="aba_b.html">Solicitações</a>
+        <a href="aba_b.html" style="color: #d90429;">Solicitações</a>
         <a href="aba_c.html">Agendamento</a>
         <a href="aba_d.html">Recomendações</a>
       </nav>
@@ -208,7 +198,7 @@
     <h1 class="titulo-secao">SOLICITAÇÕES & AGENDAMENTOS SALVOS</h1>
 
     <div class="grid-tabelas" id="listaSolicitacoes">
-      <!-- Os cartões preenchidos de 5 em 5 aparecerão aqui dinamicamente -->
+      <p style="font-size: 18px; font-weight: bold; color: #333;">Carregando solicitações...</p>
     </div>
 
     <div class="paginacao" id="controlesPaginacao" style="display:none;">
@@ -244,7 +234,7 @@ function renderizarPagina() {
   const divPaginacao = document.getElementById("controlesPaginacao");
   container.innerHTML = "";
 
-  if (todosAgendamentos.length === 0) {
+  if (!todosAgendamentos || todosAgendamentos.length === 0) {
     container.innerHTML = "<p style='font-size: 20px; font-weight: bold; color: #333;'>Nenhuma solicitação ou agendamento encontrado.</p>";
     divPaginacao.style.display = "none";
     return;

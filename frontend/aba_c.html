@@ -6,11 +6,27 @@
   <title>PulseVida - Agendamento</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f7f6;
+      font-family: rgb(124, 213, 124);
       margin: 0;
       padding: 0;
       zoom: 0.85;
+      background-image: url('/frontend/imagens/Fundo1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Camada translúcida para melhorar a leitura sobre o fundo */
+    .overlay-fundo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #008080;
+      z-index: -1;
     }
 
     header {
@@ -22,6 +38,8 @@
       justify-content: space-between;
       box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
       color: blue;
+      position: relative;
+      z-index: 10;
     }
 
     nav {
@@ -57,9 +75,11 @@
 
     /* Container Principal */
     main {
-      padding: 20px 30px;
+      padding: 20px 30px 80px 30px;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+      z-index: 10;
     }
 
     h2.titulo-principal {
@@ -272,8 +292,9 @@
 </head>
 <body>
 
+<div class="overlay-fundo"></div>
+
 <header>
-  <!-- Corrigido para apontar corretamente para a raiz dependendo de onde está o arquivo -->
   <a class="pulse" href="index.html"><h1>PulseVida ❤️</h1></a>
   <nav>
     <a href="aba_a.html">Solicitar</a>
@@ -347,7 +368,12 @@
   </div>
 </main>
 
-<!-- Botão Flutuante corrigido para voltar ao index -->
+<!-- Logo de Saquarema 2x maior no canto inferior direito -->
+<div style="position: fixed; bottom: 15px; right: 80px; z-index: 1000; background: rgba(255, 255, 255, 0.9); padding: 10px 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+  <img src="/frontend/imagens/logo_saquarema.avif" alt="Logo Saquarema" style="height: 80px; object-fit: contain; display: block;">
+</div>
+
+<!-- Botão Flutuante (Início) -->
 <a href="index.html" class="btn-flutuante" title="Voltar ao Início">
   ➜
 </a>
@@ -447,7 +473,6 @@ async function carregarAgendamentosDoServidor() {
           if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
         }
 
-        // Suporta tanto o formato do agendamentos.html quanto do aba_c.html
         let nomeP = item.paciente || item.nomePaciente || "Paciente";
         let medP = item.nomeMedico || item.hospital || "Geral";
         let horaP = item.horario || item.horarioConsulta || "--:--";
@@ -492,7 +517,6 @@ async function excluirAgendamento(id) {
   }
 }
 </script>
-
 
 </body>
 </html>

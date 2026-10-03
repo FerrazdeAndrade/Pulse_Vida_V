@@ -1,22 +1,39 @@
-/* RESET */
+/* ===== RESET E CONFIGURAÇÕES GLOBAIS ===== */
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: Arial;
-  background: #f2f6fb;
+  font-family: Arial, sans-serif;
+  background: url('../imagens/Fundo1.jpg') no-repeat center center fixed !important;
+  background-size: cover !important;
 }
 
-/* HEADER */
+/* ===== IMAGENS RESPONSIVAS (CELULAR) ===== */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== HEADER ===== */
 header {
   background: white;
-  padding: 20px;
+  padding: 15px 30px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
+/* ===== LOGO HEADER ===== */
+header .logo img {
+  height: 120px !important;
+  width: auto !important;
+  max-height: none !important;
+  cursor: pointer;
+}
+
+/* ===== MENU DE NAVEGAÇÃO ===== */
 nav a {
   background: #0a84ff;
   color: white;
@@ -25,30 +42,32 @@ nav a {
   text-decoration: none;
 }
 
-/* CONTAINER */
+/* ===== CONTAINER PRINCIPAL / SLIDER ===== */
 .container {
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-/* SLIDER */
 .slider {
   display: flex;
   align-items: center;
   gap: 15px;
   max-width: 400px;
+  width: 100%;
   background: white;
   padding: 20px;
   border-radius: 20px;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
 }
 
 .slides {
   width: 100%;
 }
 
-/* 🔥 SEM BUG */
 .slide {
   display: none;
   opacity: 0;
@@ -60,7 +79,6 @@ nav a {
   opacity: 1;
 }
 
-/* SETAS */
 .seta {
   background: #0a84ff;
   color: white;
@@ -70,16 +88,18 @@ nav a {
   cursor: pointer;
 }
 
-/* IMAGEM */
+/* ===== IMAGEM DA DOUTORA ===== */
 .imagem img {
   width: 300px;
+  max-width: 100% !important;
+  height: auto !important;
   border-radius: 20px;
   transition: opacity 0.4s ease;
 }
 
-/* CARDS */
+/* ===== CARDS E FUNCIONALIDADES ===== */
 .info {
-  padding: 50px;
+  padding: 50px 20px;
   text-align: center;
 }
 
@@ -102,14 +122,15 @@ nav a {
   font-size: 30px;
 }
 
-/* SOBRE */
+/* ===== SOBRE O PROJETO ===== */
 .sobre-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 1100px;
   margin: auto;
-  padding: 40px;
+  padding: 40px 20px;
+  gap: 30px;
 }
 
 .sobre-texto {
@@ -124,27 +145,28 @@ nav a {
 
 .sobre-img img {
   width: 450px;
+  max-width: 100% !important;
+  height: auto !important;
   border-radius: 20px;
 }
 
-/* FOOTER */
 /* ===== FOOTER ===== */
 .footer {
   background: linear-gradient(135deg, #1aa39a, #178f87);
   color: white;
-  padding: 40px;
+  padding: 40px 20px;
 }
 
-/* layout do footer */
 .footer-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 1100px;
   margin: auto;
+  flex-wrap: wrap;
+  gap: 30px;
 }
 
-/* esquerda */
 .footer-contato {
   text-align: left;
 }
@@ -157,18 +179,16 @@ nav a {
   margin: 5px 0;
 }
 
-/* whatsapp */
-.whatsapp {
+.whatsapp, .email {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.whatsapp img {
+.whatsapp img, .email img {
   width: 20px;
 }
 
-/* centro */
 .footer-centro {
   text-align: center;
 }
@@ -178,160 +198,62 @@ nav a {
   margin-bottom: 10px;
 }
 
-/* botão topo */
+/* Logo da prefeitura ajustada para não estourar no celular */
+.footer-centro img.logo-prefeitura {
+  width: 100% !important;
+  max-width: 350px !important;
+  height: auto !important;
+}
+
+/* ===== BOTÃO TOPO ===== */
 #btnTopo {
   position: fixed;
   right: 20px;
   bottom: 20px;
-
   background: white;
   color: #1aa39a;
   border: none;
-  padding: 10px;
+  padding: 12px 15px;
   border-radius: 50%;
   cursor: pointer;
-
   opacity: 0;
   transition: 0.3s;
+  box-shadow: 0px 2px 10px rgba(0,0,0,0.2);
 }
 
-/* RESPONSIVO */
-@media (max-width: 768px) {
-  .footer-container {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
-}
-
-/* BOTÃO TOPO */
-#btnTopo {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  background: white;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
-  opacity: 0;
-}
-
-/* RESPONSIVO */
-@media (max-width: 768px) {
-  .container,
-  .sobre-container {
-    flex-direction: column;
-  }
-}
-
-.email {
+/* ===== ÁREA DE LOGIN ===== */
+.area-login {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
-.email img {
-  width: 20px;
-}
-
-/* ===== HEADER ===== */
-header {
-  background: white;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* LOGO */
-.logo img {
-  height: 200px;
-  width: auto;
-  cursor: pointer;
-}
-
-/* LOGIN AREA */
-.nav-login {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* TEXTO LOGIN */
 .texto-login {
   font-size: 14px;
   color: #333;
   font-weight: 500;
 }
 
-/* BOTÃO LOGIN */
-.nav-login a {
-  background: #0a84ff;
+.btn-login {
+  background: linear-gradient(135deg, #0a84ff, #2f8fb3);
   color: white;
   padding: 8px 18px;
   border-radius: 20px;
   text-decoration: none;
+  font-weight: 500;
   transition: 0.3s;
+  letter-spacing: 0.5px;
 }
 
-.nav-login a:hover {
-  transform: scale(1.05);
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 12px rgba(0,0,0,0.2);
 }
 
-
-
-/* RESET */
-* {
-  box-sizing: border-box;
+.btn-login:active {
+  transform: scale(0.95);
 }
 
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #f2f6fb;
-}
-
-/* ===== HEADER PADRÃO ===== */
-header {
-  background: white;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* ===== LOGO HEADER ===== */
-header .logo img {
-  height: 150px !important; /* Força o tamanho desejado */
-  width: auto !important;
-  max-height: none !important;
-  cursor: pointer;
-}
-
-/* ===== LOGIN BUTTON ===== */
-.nav-login {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-
-
-/* */
-.texto-login {
-  font-size: 14px;
-}
-
-.nav-login a {
-  background: #0a84ff;
-  color: white;
-  padding: 8px 18px;
-  border-radius: 20px;
-  text-decoration: none;
-}
-
-/* ===== LOGIN BOX ===== */
 .login-container {
   width: 300px;
   margin: 100px auto;
@@ -357,42 +279,45 @@ header .logo img {
   color: white;
   border: none;
   border-radius: 10px;
+  cursor: pointer;
 }
 
+/* ===== RESPONSIVIDADE (TELA DE CELULAR / TABLET) ===== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
 
-/* ===== AREA LOGIN (CORRIGIDO) ===== */
-.area-login {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+  header nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
 
-/* TEXTO */
-.texto-login {
-  font-size: 14px;
-  color: #333;
-}
+  .container,
+  .sobre-container {
+    flex-direction: column;
+    text-align: center;
+  }
 
-/* BOTÃO BONITO */
-.btn-login {
-  background: linear-gradient(135deg, #0a84ff, #2f8fb3);
-  color: white;
-  padding: 8px 18px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: 0.3s;
-  letter-spacing: 0.5px;
+  .sobre-texto,
+  .sobre-img {
+    width: 100%;
+  }
 
-}
+  .footer-container {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
 
-/* HOVER (efeito top) */
-.btn-login:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 5px 12px rgba(0,0,0,0.2);
-}
+  .footer-contato {
+    text-align: center;
+  }
 
-/* CLICK */
-.btn-login:active {
-  transform: scale(0.95);
+  .whatsapp, .email {
+    justify-content: center;
+  }
 }
