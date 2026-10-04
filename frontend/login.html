@@ -148,8 +148,12 @@
   <a href="index.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 12px 18px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; gap: 8px; font-family: Arial, sans-serif;">
     ⬅ Início
   </a>
+  
 <!--  SCRIPTS   -->
 <script>
+  // URL da sua API no Render
+  const API_URL = "https://pulse-vida-v-api.onrender.com";
+
   function toggleSenha() {
     const inputSenha = document.getElementById("loginSenha");
     const spanToggle = document.getElementById("btnToggleSenha");
@@ -163,53 +167,50 @@
     }
   }
 
-  document.getElementById("formLogin").addEventListener("submit", function(e) {
+  document.getElementById("formLogin").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const usuarioDigitado = document.getElementById("loginUsuario").value.trim();
     const senhaDigitada = document.getElementById("loginSenha").value;
-    const tipo = document.getElementById("tipoUsuario").value; // "medico", "admin", "paciente"
+    const tipoSelecionado = document.getElementById("tipoUsuario").value; // "paciente", "medico", "admin"
 
-    // Validação especial para Administrador fixo ou contas salvas no localStorage
-    if (tipo === "admin" && usuarioDigitado === "admin" && senhaDigitada === "admin123") {
-      localStorage.setItem("logado", "true");
-      localStorage.setItem("usuarioAtivo", "admin");
-      alert("Login de Administrador realizado com sucesso!");
-      window.location.href = "/painel_admin.html"; // Redireciona para o painel correto do administrador
-      return;
-    }
+    try {
+      // Fazendo a requisição POST para a API do Render
+      const resposta = await fetch(`${API_URL}/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          usuario: usuarioDigitado,
+          senha: senhaDigitada
+        })
+      });
 
-    // Validação para Médico (Pode configurar uma senha padrão de teste ou puxar do sistema)
-    if (tipo === "medico") {
-      if (senhaDigitada.length >= 4) { // Validação simples de exemplo para médico
+      const resultado = await resposta.json();
+
+      if (resposta.ok && resultado.sucesso) {
+        // Salva os dados da sessão no navegador
         localStorage.setItem("logado", "true");
-        localStorage.setItem("usuarioAtivo", "medico");
-        localStorage.setItem("nomeMedico", usuarioDigitado);
-        alert("Login médico realizado com sucesso!");
-        window.location.href = "painel_medico.html";
-        return;
+        localStorage.setItem("usuarioAtivo", resultado.usuario);
+        localStorage.setItem("tipoUsuario", resultado.tipo);
+
+        alert(resultado.mensagem);
+
+        // Redireciona de acordo com o tipo de usuário retornado pelo servidor
+        if (resultado.tipo === "administrador" || tipoSelecionado === "admin") {
+          window.location.href = "painel_admin.html";
+        } else if (resultado.tipo === "medico" || tipoSelecionado === "medico") {
+          window.location.href = "painel_medico.html";
+        } else {
+          window.location.href = "aba_c.html";
+        }
       } else {
-        alert("Senha de médico inválida.");
-        return;
+        alert(resultado.mensagem || "Usuário ou senha incorretos!");
       }
-    }
-
-    // Validação padrão baseada nos usuários cadastrados (Pacientes)
-    const usuariosCadastrados = JSON.parse(localStorage.getItem("usuariosCadastrados")) || [];
-    const usuarioEncontrado = usuariosCadastrados.find(user => 
-      user.usuario === usuarioDigitado && user.senha === senhaDigitada
-    );
-
-    if (usuarioEncontrado) {
-      localStorage.setItem("logado", "true");
-      localStorage.setItem("usuarioAtivo", usuarioEncontrado.usuario);
-      
-      document.getElementById("formLogin").reset();
-
-      alert("Login realizado com sucesso!");
-      window.location.href = "aba_c.html";
-    } else {
-      alert("Usuário ou senha incorretos, ou conta não cadastrada!");
+    } catch (erro) {
+      console.error("Erro ao conectar com a API:", erro);
+      alert("Erro de conexão com o servidor no Render. Verifique se ele está ativo.");
     }
   });
 </script>
