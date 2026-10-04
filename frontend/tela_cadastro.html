@@ -13,7 +13,6 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Caminho direto já que estão na mesma pasta */
             background: url('imagens/Fundo1.jpg') no-repeat center center fixed;
             background-size: cover;
             display: flex;
@@ -51,7 +50,7 @@
             gap: 15px;
         }
 
-        #formCadastro input {
+        #formCadastro input, #formCadastro select {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ccc;
@@ -61,7 +60,7 @@
             transition: border-color 0.3s;
         }
 
-        #formCadastro input:focus {
+        #formCadastro input:focus, #formCadastro select:focus {
             border-color: #d9534f;
         }
 
@@ -116,9 +115,18 @@
             <form id="formCadastro">
                 <input type="text" id="usuario" placeholder="Nome de Usuário" required>
                 <input type="email" id="email" placeholder="E-mail" required>
-                <input type="password" id="senha" placeholder="Senha" required>
-                <input type="text" id="cpf" placeholder="CPF (000.000.000-00)" maxlength="14" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" oninput="formatarCPF(this)" title="O número do CPF deve ter 11 dígitos" required>
-                <input type="text" id="sus" placeholder="Número do SUS" maxlength="15" oninput="formatarSUS(this)" pattern="\d{15}" title="O número do SUS deve ter 15 dígitos" required>         
+                <input type="password" id="senha" placeholder="Senha (mínimo 5 caracteres)" required>
+                
+                <select id="tipoUsuario" required>
+                    <option value="" disabled selected>Selecione o Tipo de Acesso</option>
+                    <option value="paciente">Paciente</option>
+                    <option value="medico">Médico</option>
+                    <option value="administrador">Administrador</option>
+                </select>
+
+                <input type="text" id="cpf" placeholder="CPF (000.000.000-00)" maxlength="14" required>
+                <input type="text" id="sus" placeholder="Número do SUS" maxlength="15" required>         
+                
                 <button type="submit">Cadastrar</button>
             </form>
         </div>
@@ -126,7 +134,6 @@
 
     <footer>
         <p>PulseVida - Cuidando da sua saúde em Saquarema</p>
-        <!-- Caminho direto para a logo na mesma pasta -->
         <img src="imagens/logo_saquarema.avif" alt="Logo Saquarema">
     </footer>
 
@@ -136,11 +143,14 @@
   document.getElementById("formCadastro").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const usuario = document.getElementById("nomeUsuario").value.trim();
-    const senha = document.getElementById("senhaUsuario").value;
-    const tipo = document.getElementById("tipoUsuario").value; // "paciente", "medico", "administrador"
+    const usuario = document.getElementById("usuario").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value;
+    const tipo = document.getElementById("tipoUsuario").value;
+    const cpf = document.getElementById("cpf").value.trim();
+    const sus = document.getElementById("sus").value.trim();
 
-    // Validação do tamanho mínimo da senha (ex: 5 caracteres)
+    // Validação do tamanho mínimo da senha (mínimo de 5 caracteres)
     if (senha.length < 5) {
       alert("A senha deve ter no mínimo 5 caracteres!");
       return;
@@ -152,7 +162,7 @@
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ usuario, senha, tipo })
+        body: JSON.stringify({ usuario, email, senha, tipo, cpf, sus })
       });
 
       const resultado = await resposta.json();
