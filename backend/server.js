@@ -37,8 +37,15 @@ app.post('/api/login', (req, res) => {
 // Rota para cadastrar novos usuários (Cadastro)
 app.post('/api/usuarios', (req, res) => {
     const novoUsuario = req.body;
+    
+    // Evita duplicidade simples de usuário
+    const existe = bancoDeDadosUsuarios.find(u => u.usuario === novoUsuario.usuario);
+    if (existe) {
+        return res.status(400).json({ sucesso: false, mensagem: "Usuário já cadastrado!" });
+    }
+
     bancoDeDadosUsuarios.push(novoUsuario);
-    res.status(201).json({ mensagem: "Usuário cadastrado com sucesso!", usuario: novoUsuario });
+    res.status(201).json({ sucesso: true, mensagem: "Usuário cadastrado com sucesso!", usuario: novoUsuario });
 });
 
 // --- ROTAS DE AGENDAMENTOS ---
@@ -63,18 +70,13 @@ app.get('/api/agendamentos', (req, res) => {
 // --- ROTA PARA EXCLUIR AGENDAMENTO ---
 app.delete('/api/agendamentos/:id', (req, res) => {
     const idParam = req.params.id;
-    console.log("Tentando excluir o ID recebido da URL:", idParam);
-    console.log("IDs atuais no banco:", bancoDeDadosAgendamentos.map(i => i.id));
-
     const index = bancoDeDadosAgendamentos.findIndex(item => String(item.id) === String(idParam));
 
     if (index === -1) {
-        console.log("Erro: Item não encontrado no array!");
         return res.status(404).json({ mensagem: "Agendamento não encontrado." });
     }
 
     bancoDeDadosAgendamentos.splice(index, 1);
-    console.log("Sucesso! Item excluído.");
     res.json({ mensagem: "Agendamento excluído com sucesso!" });
 });
 
