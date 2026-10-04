@@ -12,7 +12,7 @@
     <div style="display: flex; align-items: center; gap: 10px;">
       <h2 style="color: #d9534f; margin: 0;">PulseVida ❤ [Painel Administrativo]</h2>
     </div>
-    <button onclick="fazerLogout()" style="background: #d9534f; color: white; padding: 8px 15px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold;">Início</button>
+    <button onclick="fazerLogout()" style="background: #d9534f; color: white; padding: 8px 15px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold;">Sair</button>
   </header>
 
   <div class="admin-container" style="padding: 30px; max-width: 1200px; margin: 0 auto;">
@@ -52,17 +52,24 @@
   </div>
 
   <script>
-    // Verifica se o admin está logado
-    if (localStorage.getItem("logado") !== "true" || localStorage.getItem("usuarioAtivo") !== "admin") {
+    // URL da API no Render
+    const API_URL = "https://pulse-vida-v-api.onrender.com";
+
+    // Validação corrigida para verificar o tipo de acesso administrador
+    const logado = localStorage.getItem("logado");
+    const tipoUsuario = localStorage.getItem("tipoUsuario");
+
+    if (logado !== "true" || (tipoUsuario !== "admin" && tipoUsuario !== "administrador")) {
       alert("Acesso negado! Faça login como Administrador.");
       window.location.href = "login.html";
     }
 
     async function carregarDadosAdmin() {
       try {
-        const respostaAgendamentos = await fetch('http://localhost:3000/api/agendamentos');
-        const agendamentos = await respostaAgendamentos.json();
+        const respostaAgendamentos = await fetch(`${API_URL}/api/agendamentos`);
+        if (!respostaAgendamentos.ok) throw new Error("Erro ao buscar dados do servidor");
 
+        const agendamentos = await respostaAgendamentos.json();
         document.getElementById("totalAgendamentos").textContent = agendamentos.length;
 
         const tbody = document.getElementById("tabelaCorpo");
@@ -78,10 +85,10 @@
           tr.style.borderBottom = "1px solid #eee";
           tr.innerHTML = `
             <td style="padding: 10px;">${item.id || '-'}</td>
-            <td style="padding: 10px;">${item.paciente || 'Paciente PulseVida'}</td>
+            <td style="padding: 10px;">${item.paciente || item.usuario || 'Paciente PulseVida'}</td>
             <td style="padding: 10px;">${item.hospital || item.medico || 'Clínica Geral'}</td>
             <td style="padding: 10px;">${item.data || 'Hoje'}</td>
-            <td style="padding: 10px;"><span style="color: #d9822b; font-weight: bold;">${item.status || 'Confirmado (Pendente Sincronização Google Calendar)'}</span></td>
+            <td style="padding: 10px;"><span style="color: #28a745; font-weight: bold;">${item.status || 'Confirmado'}</span></td>
             <td style="padding: 10px; text-align: center;">
               <button onclick="excluirAgendamento(${item.id})" style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Excluir</button>
             </td>
@@ -90,7 +97,7 @@
         });
       } catch (error) {
         console.error("Erro ao conectar com o backend:", error);
-        document.getElementById("statusSistema").textContent = "Offline (Erro API)";
+        document.getElementById("statusSistema").textContent = "Offline (Render)";
         document.getElementById("statusSistema").style.color = "red";
       }
     }
@@ -99,13 +106,13 @@
       if (!confirm("Tem certeza que deseja excluir esta consulta?")) return;
 
       try {
-        const resposta = await fetch(`http://localhost:3000/api/agendamentos/${id}`, {
+        const resposta = await fetch(`${API_URL}/api/agendamentos/${id}`, {
           method: 'DELETE'
         });
 
         if (resposta.ok) {
           alert("Consulta excluída com sucesso!");
-          carregarDadosAdmin(); // Atualiza a tabela na hora
+          carregarDadosAdmin();
         } else {
           alert("Erro ao excluir a consulta.");
         }
@@ -117,7 +124,7 @@
 
     function fazerLogout() {
       localStorage.clear();
-      window.location.href = "painel_admin.html";
+      window.location.href = "index.html";
     }
 
     carregarDadosAdmin();
