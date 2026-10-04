@@ -379,144 +379,147 @@
 </a>
 
 <script>
-// Carrega os agendamentos do Servidor Node.js ao abrir a página
-window.onload = function() {
-  carregarAgendamentosDoServidor();
-};
+  // URL da API hospedada no Render
+  const API_URL = "https://pulse-vida-v-api.onrender.com";
 
-function toggleAgendamentos() {
-  const container = document.getElementById("containerAgendamentos");
-  const seta = document.getElementById("iconeSeta");
-
-  if (container.style.display === "none") {
-    container.style.display = "block";
-    seta.innerText = "▲";
-  } else {
-    container.style.display = "none";
-    seta.innerText = "▼";
-  }
-}
-
-function limparFormulario() {
-  document.getElementById("nomePaciente").value = "";
-  document.getElementById("cpfPaciente").value = "";
-  document.getElementById("susPaciente").value = "";
-  document.getElementById("nomeMedico").value = "";
-  document.getElementById("dataConsulta").value = "";
-  document.getElementById("horarioConsulta").value = "";
-}
-
-// Salvar agendamento direto no Servidor Node.js
-async function realizarAgendamento() {
-  const nome = document.getElementById("nomePaciente").value;
-  const cpf = document.getElementById("cpfPaciente").value;
-  const sus = document.getElementById("susPaciente").value;
-  const especialidade = document.getElementById("especialidade").value;
-  const medico = document.getElementById("nomeMedico").value;
-  const data = document.getElementById("dataConsulta").value;
-  const horario = document.getElementById("horarioConsulta").value;
-
-  if (!nome || !cpf || !sus || !medico || !data || !horario) {
-    alert("Por favor, preencha todos os campos do formulário.");
-    return;
-  }
-
-  const novoAgendamento = {
-    paciente: nome,
-    cpf: cpf,
-    sus: sus,
-    especialidade: especialidade,
-    nomeMedico: medico,
-    data: data,
-    horario: horario,
-    hospital: "Unidade Principal (Saquarema)"
+  // Carrega os agendamentos do Servidor ao abrir a página
+  window.onload = function() {
+    carregarAgendamentosDoServidor();
   };
 
-  try {
-    const resposta = await fetch('http://localhost:3000/api/agendamentos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(novoAgendamento)
-    });
+  function toggleAgendamentos() {
+    const container = document.getElementById("containerAgendamentos");
+    const seta = document.getElementById("iconeSeta");
 
-    if (resposta.ok) {
-      alert("Consulta agendada e salva no servidor com sucesso!");
-      limparFormulario();
-      carregarAgendamentosDoServidor();
+    if (container.style.display === "none") {
+      container.style.display = "block";
+      seta.innerText = "▲";
     } else {
-      alert("Erro ao salvar agendamento no servidor.");
+      container.style.display = "none";
+      seta.innerText = "▼";
     }
-  } catch (err) {
-    console.error("Erro de conexão:", err);
-    alert("Não foi possível conectar ao servidor Node.js.");
   }
-}
 
-// Buscar lista de agendamentos diretamente do Servidor Node.js
-async function carregarAgendamentosDoServidor() {
-  try {
-    const resposta = await fetch('http://localhost:3000/api/agendamentos');
-    const solicitacoes = await resposta.json();
-    
-    const container = document.getElementById("listaAgendamentos");
-    container.innerHTML = "";
+  function limparFormulario() {
+    document.getElementById("nomePaciente").value = "";
+    document.getElementById("cpfPaciente").value = "";
+    document.getElementById("susPaciente").value = "";
+    document.getElementById("nomeMedico").value = "";
+    document.getElementById("dataConsulta").value = "";
+    document.getElementById("horarioConsulta").value = "";
+  }
 
-    let totalValidos = solicitacoes.length;
+  // Salvar agendamento direto na API do Render
+  async function realizarAgendamento() {
+    const nome = document.getElementById("nomePaciente").value;
+    const cpf = document.getElementById("cpfPaciente").value;
+    const sus = document.getElementById("susPaciente").value;
+    const especialidade = document.getElementById("especialidade").value;
+    const medico = document.getElementById("nomeMedico").value;
+    const data = document.getElementById("dataConsulta").value;
+    const horario = document.getElementById("horarioConsulta").value;
 
-    if (totalValidos === 0) {
-      container.innerHTML = "<p style='color: #666; text-align: center; margin: 20px 0; font-size: 13px;'>Nenhum agendamento salvo.</p>";
-    } else {
-      solicitacoes.forEach((item) => {
-        let dataFormatada = item.data || "";
-        if (dataFormatada.includes("-")) {
-          let partes = dataFormatada.split("-");
-          if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
-        }
-
-        let nomeP = item.paciente || item.nomePaciente || "Paciente";
-        let medP = item.nomeMedico || item.hospital || "Geral";
-        let horaP = item.horario || item.horarioConsulta || "--:--";
-        let susP = item.sus || "N/A";
-
-        container.innerHTML += `
-          <div class="item-salvo">
-            <div class="item-detalhes">
-              <p><strong>${nomeP}</strong></p>
-              <p>SUS: ${susP} | Médico/Local: ${medP}</p>
-              <p>📅 ${dataFormatada} às ${horaP}</p>
-            </div>
-            <button onclick="excluirAgendamento('${item.id}')" class="btn-excluir">Excluir</button>
-          </div>
-        `;
-      });
+    if (!nome || !cpf || !sus || !medico || !data || !horario) {
+      alert("Por favor, preencha todos os campos do formulário.");
+      return;
     }
 
-    document.getElementById("contadorBadge").innerText = totalValidos;
-  } catch (err) {
-    console.error("Erro ao buscar agendamentos:", err);
-  }
-}
+    const novoAgendamento = {
+      paciente: nome,
+      cpf: cpf,
+      sus: sus,
+      especialidade: especialidade,
+      nomeMedico: medico,
+      data: data,
+      horario: horario,
+      hospital: "Unidade Principal (Saquarema)"
+    };
 
-// Excluir agendamento diretamente do Servidor Node.js pela rota DELETE
-async function excluirAgendamento(id) {
-  if (confirm("Tem certeza que deseja excluir este agendamento?")) {
     try {
-      const resposta = await fetch(`http://localhost:3000/api/agendamentos/${id}`, {
-        method: 'DELETE'
+      const resposta = await fetch(`${API_URL}/api/agendamentos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novoAgendamento)
       });
 
       if (resposta.ok) {
+        alert("Consulta agendada e salva no servidor com sucesso!");
+        limparFormulario();
         carregarAgendamentosDoServidor();
       } else {
-        alert("Não foi possível excluir o agendamento no servidor.");
+        alert("Erro ao salvar agendamento no servidor.");
       }
     } catch (err) {
-      console.error("Erro de conexão ao excluir:", err);
-      alert("Erro ao conectar com o servidor para exclusão.");
+      console.error("Erro de conexão:", err);
+      alert("Não foi possível conectar ao servidor no Render.");
     }
   }
-}
-</script>
+
+  // Buscar lista de agendamentos diretamente da API do Render
+  async function carregarAgendamentosDoServidor() {
+    try {
+      const resposta = await fetch(`${API_URL}/api/agendamentos`);
+      const solicitacoes = await resposta.json();
+      
+      const container = document.getElementById("listaAgendamentos");
+      container.innerHTML = "";
+
+      let totalValidos = solicitacoes.length;
+
+      if (totalValidos === 0) {
+        container.innerHTML = "<p style='color: #666; text-align: center; margin: 20px 0; font-size: 13px;'>Nenhum agendamento salvo.</p>";
+      } else {
+        solicitacoes.forEach((item) => {
+          let dataFormatada = item.data || "";
+          if (dataFormatada.includes("-")) {
+            let partes = dataFormatada.split("-");
+            if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+          }
+
+          let nomeP = item.paciente || item.nomePaciente || "Paciente";
+          let medP = item.nomeMedico || item.hospital || "Geral";
+          let horaP = item.horario || item.horarioConsulta || "--:--";
+          let susP = item.sus || "N/A";
+
+          container.innerHTML += `
+            <div class="item-salvo">
+              <div class="item-detalhes">
+                <p><strong>${nomeP}</strong></p>
+                <p>SUS: ${susP} | Médico/Local: ${medP}</p>
+                <p>📅 ${dataFormatada} às ${horaP}</p>
+              </div>
+              <button onclick="excluirAgendamento('${item.id}')" class="btn-excluir">Excluir</button>
+            </div>
+          `;
+        });
+      }
+
+      document.getElementById("contadorBadge").innerText = totalValidos;
+    } catch (err) {
+      console.error("Erro ao buscar agendamentos:", err);
+    }
+  }
+
+  // Excluir agendamento diretamente da API do Render pela rota DELETE
+  async function excluirAgendamento(id) {
+    if (confirm("Tem certeza que deseja excluir este agendamento?")) {
+      try {
+        const resposta = await fetch(`${API_URL}/api/agendamentos/${id}`, {
+          method: 'DELETE'
+        });
+
+        if (resposta.ok) {
+          carregarAgendamentosDoServidor();
+        } else {
+          alert("Não foi possível excluir o agendamento no servidor.");
+        }
+      } catch (err) {
+        console.error("Erro de conexão ao excluir:", err);
+        alert("Erro ao conectar com o servidor para exclusão.");
+      }
+    }
+  }
+</script>>
 
 </body>
 </html>
