@@ -148,7 +148,7 @@
   <a href="index.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 12px 18px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; gap: 8px; font-family: Arial, sans-serif;">
     ⬅ Início
   </a>
-  
+
 <!--  SCRIPTS   -->
 <script>
   // URL da sua API no Render
@@ -189,7 +189,7 @@
 
       const resultado = await resposta.json();
 
-      if (resposta.ok && resultado.sucesso) {
+    if (resposta.ok && resultado.sucesso) {
         // Salva os dados da sessão no navegador
         localStorage.setItem("logado", "true");
         localStorage.setItem("usuarioAtivo", resultado.usuario);
@@ -197,17 +197,17 @@
 
         alert(resultado.mensagem);
 
-        // Redireciona de acordo com o tipo de usuário retornado pelo servidor
-        if (resultado.tipo === "administrador" || tipoSelecionado === "admin") {
-          window.location.href = "painel_admin.html";
-        } else if (resultado.tipo === "medico" || tipoSelecionado === "medico") {
+        // Redirecionamento dinâmico baseado estritamente no tipo retornado pelo servidor
+        if (resultado.tipo === "medico") {
           window.location.href = "painel_medico.html";
+        } else if (resultado.tipo === "administrador") {
+          window.location.href = "painel_admin.html";
         } else {
           window.location.href = "aba_c.html";
         }
       } else {
         alert(resultado.mensagem || "Usuário ou senha incorretos!");
-      }
+      }  
     } catch (erro) {
       console.error("Erro ao conectar com a API:", erro);
       alert("Erro de conexão com o servidor no Render. Verifique se ele está ativo.");
