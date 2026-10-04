@@ -2,7 +2,7 @@
 // CONFIGURAÇÃO DA API
 // ==========================================
 // Altere para a URL real do seu backend hospedado (ex: Render, Railway)
-const API_URL = "https://sua-api.onrender.com";
+const API_URL = "https://pulse-vida-v-api.onrender.com";
 
 // ==========================================
 // 1. REGISTRO DO SERVICE WORKER E PUSH NOTIFICATIONS
