@@ -149,7 +149,7 @@
     ⬅ Início
   </a>
 
-<!--  SCRIPTS   -->
+<!--  SCRIPTS  -->
 <script>
   // URL da sua API no Render
   const API_URL = "https://pulse-vida-v-api.onrender.com";
@@ -189,7 +189,7 @@
 
       const resultado = await resposta.json();
 
-    if (resposta.ok && resultado.sucesso) {
+      if (resposta.ok && resultado.sucesso) {
         // Salva os dados da sessão no navegador
         localStorage.setItem("logado", "true");
         localStorage.setItem("usuarioAtivo", resultado.usuario);
@@ -197,12 +197,16 @@
 
         alert(resultado.mensagem);
 
-        // Redirecionamento dinâmico baseado estritamente no tipo retornado pelo servidor
-        if (resultado.tipo === "medico") {
+        // Normaliza o tipo para evitar erros de maiúsculas ou variações
+        const tipoRetornado = (resultado.tipo || "").toLowerCase();
+
+        // Redirecionamento dinâmico corrigido
+        if (tipoRetornado === "medico") {
           window.location.href = "painel_medico.html";
-        } else if (resultado.tipo === "administrador") {
+        } else if (tipoRetornado === "administrador" || tipoRetornado === "admin") {
           window.location.href = "painel_admin.html";
         } else {
+          // Garante que o paciente vai para a aba_c.html ou painel do paciente
           window.location.href = "aba_c.html";
         }
       } else {
