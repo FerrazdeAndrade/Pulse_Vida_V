@@ -1,4 +1,10 @@
 // ==========================================
+// CONFIGURAÇÃO DA API
+// ==========================================
+// Altere para a URL real do seu backend hospedado (ex: Render, Railway)
+const API_URL = "https://sua-api.onrender.com";
+
+// ==========================================
 // 1. REGISTRO DO SERVICE WORKER E PUSH NOTIFICATIONS
 // ==========================================
 
@@ -66,6 +72,9 @@ function urlBase64ToUint8Array(base64String) {
 // ==========================================
 
 function processarLogin(tipo, nomeDoMedico = "Dr(a). Responsável") {
+  // Exemplo de como você faria uma chamada para a sua API hospedada:
+  // fetch(`${API_URL}/api/login`, { method: 'POST', ... })
+
   // Validação do login do médico conforme solicitado
   if (tipo === "medico") {
     localStorage.setItem("logado", "true");
