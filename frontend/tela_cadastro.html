@@ -131,41 +131,43 @@
     </footer>
 
 <script>
-    function formatarSUS(campo) {
-        let valor = campo.value.replace(/\D/g, "");
-        valor = valor.substring(0, 15);
-        campo.value = valor;
+  const API_URL = "https://pulse-vida-v-api.onrender.com";
+
+  document.getElementById("formCadastro").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const usuario = document.getElementById("nomeUsuario").value.trim();
+    const senha = document.getElementById("senhaUsuario").value;
+    const tipo = document.getElementById("tipoUsuario").value; // "paciente", "medico", "administrador"
+
+    // Validação do tamanho mínimo da senha (ex: 5 caracteres)
+    if (senha.length < 5) {
+      alert("A senha deve ter no mínimo 5 caracteres!");
+      return;
     }
 
-    function formatarCPF(campo) {
-        let valor = campo.value;
-        valor = valor.replace(/\D/g, "");
-        valor = valor.substring(0, 11);
-        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
-        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
-        valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-        campo.value = valor;
-    }
+    try {
+      const resposta = await fetch(`${API_URL}/api/usuarios`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ usuario, senha, tipo })
+      });
 
-    document.getElementById("formCadastro").addEventListener("submit", function(e) {
-        e.preventDefault();
+      const resultado = await resposta.json();
 
-        const usuario = document.getElementById("usuario").value;
-        const email = document.getElementById("email").value;
-        const senha = document.getElementById("senha").value;
-        const cpf = document.getElementById("cpf").value;
-        const sus = document.getElementById("sus").value;
-
-        const novoUsuario = { usuario, email, senha, cpf, sus };
-
-        let usuarios = JSON.parse(localStorage.getItem("usuariosCadastrados")) || [];
-        usuarios.push(novoUsuario);
-        localStorage.setItem("usuariosCadastrados", JSON.stringify(usuarios));
-
-        alert("Cadastro realizado com sucesso!");
-        
+      if (resposta.ok) {
+        alert("Cadastro realizado com sucesso! Faça o login.");
         window.location.href = "login.html";
-    });
+      } else {
+        alert(resultado.mensagem || "Erro ao cadastrar usuário.");
+      }
+    } catch (erro) {
+      console.error("Erro:", erro);
+      alert("Erro de conexão com o servidor no Render.");
+    }
+  });
 </script>
 </body>
 </html>
