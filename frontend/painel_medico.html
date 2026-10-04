@@ -101,26 +101,29 @@
 
 <!-- ===== SCRIPTS DO PAINEL DO MÉDICO ===== -->
 <script>
+  // URL da API no Render (substitui o localhost para funcionar no Netlify)
+  const API_URL = "https://pulse-vida-v-api.onrender.com";
   let pacienteSelecionadoId = null;
 
   window.addEventListener("DOMContentLoaded", () => {
     const logado = localStorage.getItem("logado");
-    const usuarioAtivo = localStorage.getItem("usuarioAtivo");
-    const nomeMedico = localStorage.getItem("nomeMedico") || "Dr(a). Convidado(a)";
+    const tipoUsuario = localStorage.getItem("tipoUsuario");
+    const usuarioAtivo = localStorage.getItem("usuarioAtivo") || "Dr(a). Médico(a)";
 
-    if (logado !== "true" || usuarioAtivo !== "medico") {
+    // Validação corrigida para verificar o tipo de acesso correto
+    if (logado !== "true" || tipoUsuario !== "medico") {
       alert("Acesso restrito. Faça login como médico.");
       window.location.href = "login.html";
       return;
     }
 
-    document.getElementById("nomeMedicoLogado").textContent = nomeMedico;
+    document.getElementById("nomeMedicoLogado").textContent = usuarioAtivo;
     carregarAgendamentosMedico();
   });
 
   async function carregarAgendamentosMedico() {
     try {
-      const resposta = await fetch('http://localhost:3000/api/agendamentos');
+      const resposta = await fetch(`${API_URL}/api/agendamentos`);
       if (!resposta.ok) throw new Error("Erro ao buscar dados do servidor");
 
       const agendamentos = await resposta.json();
@@ -139,21 +142,21 @@
         tr.style.borderBottom = "1px solid #eee";
         tr.innerHTML = `
           <td style="padding: 12px;">${item.id}</td>
-          <td style="padding: 12px; font-weight: bold; color: #333;">${item.paciente}</td>
-          <td style="padding: 12px;">${item.hospital}</td>
-          <td style="padding: 12px;">${item.data}</td>
+          <td style="padding: 12px; font-weight: bold; color: #333;">${item.paciente || item.usuario || 'Paciente'}</td>
+          <td style="padding: 12px;">${item.hospital || item.unidade || 'Unidade Saquarema'}</td>
+          <td style="padding: 12px;">${item.data || 'Data não informada'}</td>
           <td style="padding: 12px;"><span style="color: #28a745; font-weight: bold;">${item.status || 'Confirmado'}</span></td>
           <td style="padding: 12px; text-align: center; display: flex; gap: 8px; justify-content: center;">
-            <button onclick="abrirModalProntuario(${item.id}, '${item.paciente}')" style="background:#007bff; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight: bold;">Atender / Prontuário</button>
+            <button onclick="abrirModalProntuario(${item.id}, '${item.paciente || item.usuario}')" style="background:#007bff; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight: bold;">Atender / Prontuário</button>
             <button onclick="deletarAgendamento(${item.id})" style="background:#d9534f; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight: bold;">Excluir</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
 
-    }  catch (err) {
+    } catch (err) {
       console.error("Erro:", err);
-      document.getElementById("statusServidorMedico").textContent = "Offline (Node.js)";
+      document.getElementById("statusServidorMedico").textContent = "Offline (Render)";
       document.getElementById("statusServidorMedico").style.color = "red";
     }
   }
@@ -164,12 +167,12 @@
     }
 
     try {
-      const resposta = await fetch(`http://localhost:3000/api/agendamentos/${id}`, {
+      const resposta = await fetch(`${API_URL}/api/agendamentos/${id}`, {
         method: 'DELETE'
       });
 
       if (!resposta.ok) {
-        throw new Error("Erro ao excluir o registro no servidor.");
+        throw new Error("Erro ao excluir o registo no servidor.");
       }
 
       alert("Agendamento excluído com sucesso!");
@@ -177,7 +180,7 @@
 
     } catch (err) {
       console.error("Erro ao excluir:", err);
-      alert("Não foi possível excluir o agendamento. Verifique a conexão com o servidor.");
+      alert("Não foi possível excluir o agendamento. Verifique a ligação com o servidor.");
     }
   }
 
@@ -196,8 +199,6 @@
 
   function salvarProntuario() {
     const pressao = document.getElementById("pressaoAferida").value;
-    const obs = document.getElementById("obsMedicas").value;
-
     if (!pressao) {
       alert("Por favor, informe a pressão arterial aferida.");
       return;
