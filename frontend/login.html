@@ -149,7 +149,7 @@
     ⬅ Início
   </a>
 
-<!--  SCRIPTS   -->
+<!--  SCRIPTS  -->
 <script>
   // URL da sua API no Render
   const API_URL = "https://pulse-vida-v-api.onrender.com";
@@ -158,12 +158,14 @@
     const inputSenha = document.getElementById("loginSenha");
     const spanToggle = document.getElementById("btnToggleSenha");
 
+    if (!inputSenha || !spanToggle) return;
+
     if (inputSenha.type === "password") {
       inputSenha.type = "text";
       spanToggle.textContent = "🙈";
     } else {
       inputSenha.type = "password";
-      spanToggle.textContent = "👁️";
+      spanToggle.textContent = "👁️️";
     }
   }
 
@@ -172,7 +174,7 @@
 
     const usuarioDigitado = document.getElementById("loginUsuario").value.trim();
     const senhaDigitada = document.getElementById("loginSenha").value;
-    const tipoSelecionado = document.getElementById("tipoUsuario").value; // "paciente", "medico", "admin"
+    const tipoSelecionado = document.getElementById("tipoUsuario") ? document.getElementById("tipoUsuario").value : ""; // "paciente", "medico", "admin"
 
     try {
       // Fazendo a requisição POST para a API do Render
@@ -183,13 +185,14 @@
         },
         body: JSON.stringify({
           usuario: usuarioDigitado,
-          senha: senhaDigitada
+          senha: senhaDigitada,
+          tipo: tipoSelecionado
         })
       });
 
       const resultado = await resposta.json();
 
-    if (resposta.ok && resultado.sucesso) {
+      if (resposta.ok && resultado.sucesso) {
         // Salva os dados da sessão no navegador
         localStorage.setItem("logado", "true");
         localStorage.setItem("usuarioAtivo", resultado.usuario);
