@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -29,7 +28,6 @@
     <a href="aba_d.html" style="text-decoration: none; color: #333; font-weight: bold;">Recomendações</a>
     <a href="hospitais_saquarema.html" style="text-decoration: none; color: #333; font-weight: bold;">Hospitais de Saquarema</a>
   </nav>
-
 
   <!-- ÁREA DE LOGINS -->
   <div class="area-login" style="display: flex; align-items: center; gap: 10px;">
@@ -85,7 +83,6 @@
     <h2 style="color: #d9534f; margin-top: 0;">⚠️ Urgência Hipertensão - Saquarema</h2>
     <p style="color: #555;">Atendimento de emergência direcionado aos 3 hospitais de referência para residentes em Saquarema.</p>
     
-    <!-- Transformado em link (<a>) direcionando para hospitais_saquarema.html -->
     <a href="hospitais_saquarema.html" style="display: inline-block; background-color: #d9534f; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 15px; margin-top: 10px;">
       Emergência Hipertensos (Saquarema)
     </a>
@@ -185,43 +182,6 @@
   </div>
 </section>
 
-<!-- ===== PAINEL DO ADMINISTRADOR (Exibido apenas quando logado como Admin) ===== -->
-<section id="painelAdmin" class="admin-section">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h2 style="color: #d9534f; margin: 0;">Painel Administrativo - PulseVida</h2>
-    <button onclick="fazerLogoutAdmin()" style="background: #d9534f; color: white; padding: 8px 15px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold;">Sair do Painel</button>
-  </div>
-
-  <div class="cards-metricas">
-    <div class="card-metrica">
-      <h3>Total de Agendamentos</h3>
-      <p id="totalAgendamentos">0</p>
-    </div>
-    <div class="card-metrica" style="border-left-color: #28a745;">
-      <h3>Status da API Node.js</h3>
-      <p id="statusServidor" style="color: #28a745;">Conectado</p>
-    </div>
-  </div>
-
-  <div class="tabela-container">
-    <h3>Agendamentos Cadastrados no Servidor</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Paciente</th>
-          <th>Unidade / Hospital</th>
-          <th>Data</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaCorpoAdmin">
-        <!-- Preenchido via JavaScript -->
-      </tbody>
-    </table>
-  </div>
-</section>
-
 <!-- ===== FOOTER ===== -->
 <footer class="footer">
   <div class="footer-container">
@@ -248,14 +208,14 @@
     </div>
 
     <div class="footer-centro">
-      <img src="imagens/qrcode_pulse_vida.png" alt="QR Code do PulseVida" style="width: 150px; height: 150px;">
-  
-      <!-- Adicionamos a classe 'logo-prefeitura' aqui -->
+      <!-- QR Code atualizado apontando para o Netlify -->
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://pulsevidav.netlify.app" alt="QR Code do PulseVida" style="width: 150px; height: 150px; background: white; padding: 5px; border-radius: 4px;">
+ 
       <img src="imagens/logo_saquarema.avif" alt="Prefeitura de Saquarema" class="logo-prefeitura" style="width: 500px; height: 200px;">
-  >
-  
+ 
       <p>Prefeitura de Saquarema | R. Cel. Madureira, 77 - Centro, Saquarema - RJ</p>
     </div>
+  </div>
 
   <button id="btnTopo" onclick="voltarTopo()">⬆</button>
 </footer>
@@ -265,7 +225,6 @@
   // ===== CONTROLE DO CARROSSEL DE SLIDES E IMAGENS =====
   let slideAtual = 0;
 
-  // Lista com os caminhos das imagens correspondentes a cada slide
   const imagensSlides = [
     "imagens/doutora1.avif",
     "imagens/doutora2.avif",
@@ -278,35 +237,28 @@
     
     if (slides.length === 0) return;
 
-    // Remove a classe ativo do slide atual
     slides[slideAtual].classList.remove("ativo");
     
-    // Atualiza o índice do slide
     slideAtual += direcao;
     
-    // Faz o loop infinito (se passar do último, volta pro primeiro e vice-versa)
     if (slideAtual >= slides.length) {
       slideAtual = 0;
     } else if (slideAtual < 0) {
       slideAtual = slides.length - 1;
     }
     
-    // Adiciona a classe ativo no novo slide
     slides[slideAtual].classList.add("ativo");
 
-    // Altera a imagem correspondente, se o elemento existir na tela
     if (imgElemento && imagensSlides[slideAtual]) {
       imgElemento.src = imagensSlides[slideAtual];
     }
   }
 
-  // Transição automática a cada 5 segundos (opcional)
   setInterval(() => {
     mudarSlide(1);
   }, 5000);
 
-
-  // ===== AGENDAMENTO E PAINEL ADMINISTRATIVO =====
+  // ===== AGENDAMENTO =====
   async function realizarAgendamentoUnico() {
     const nome = document.getElementById("pacienteNome").value;
     const hospital = document.getElementById("hospital").value;
@@ -334,7 +286,6 @@
         alert("Agendamento realizado com sucesso!");
         document.getElementById("pacienteNome").value = "";
         document.getElementById("hospital").selectedIndex = 0;
-        carregarPainelAdminSeLogado();
       } else {
         alert("Erro ao salvar agendamento no servidor.");
       }
@@ -343,62 +294,6 @@
       alert("Não foi possível conectar ao servidor Node.js na porta 3000.");
     }
   }
-
-  async function carregarPainelAdminSeLogado() {
-    const usuarioAtivo = localStorage.getItem("usuarioAtivo");
-    const logado = localStorage.getItem("logado");
-
-    if (logado === "true" && usuarioAtivo === "admin") {
-      const painel = document.getElementById("painelAdmin");
-      if (painel) painel.classList.add("ativo");
-      
-      try {
-        const res = await fetch('http://localhost:3000/api/agendamentos');
-        const agendamentos = await res.json();
-        
-        const totalEl = document.getElementById("totalAgendamentos");
-        if (totalEl) totalEl.textContent = agendamentos.length;
-
-        const tbody = document.getElementById("tabelaCorpoAdmin");
-        if (tbody) {
-          tbody.innerHTML = "";
-
-          if (agendamentos.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#777;">Nenhum agendamento registrado.</td></tr>`;
-            return;
-          }
-
-          agendamentos.forEach(item => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${item.id}</td>
-              <td>${item.paciente}</td>
-              <td>${item.hospital}</td>
-              <td>${item.data}</td>
-              <td><span style="color: green; font-weight: bold;">${item.status}</span></td>
-            `;
-            tbody.appendChild(tr);
-          });
-        }
-      } catch (e) {
-        const statusServidor = document.getElementById("statusServidor");
-        if (statusServidor) {
-          statusServidor.textContent = "Offline";
-          statusServidor.style.color = "red";
-        }
-      }
-    }
-  }
-
-  function fazerLogoutAdmin() {
-    localStorage.clear();
-    const painel = document.getElementById("painelAdmin");
-    if (painel) painel.classList.remove("ativo");
-    alert("Logout realizado!");
-  }
-
-  // Executa ao carregar a página caso já esteja logado
-  window.addEventListener("DOMContentLoaded", carregarPainelAdminSeLogado);
 </script>
 
 <script src="app.js"></script>
