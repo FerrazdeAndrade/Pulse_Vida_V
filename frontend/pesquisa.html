@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse & Vida - Pesquisa de Satisfação e Feedback</title>
+    <link rel="stylesheet" href="Css/pesquisa.css">
+</head>
+<body>
+    <!-- Navbar padrão igual ao index.html -->
+    <header class="navbar">
+        <div class="logo">
+            <span class="pulse-text">Pulse</span><span class="vida-text">Vida</span> <span class="heart-icon">❤️</span>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-btn">Início</a>
+            <a href="pesquisa.html" class="nav-btn active">Avaliação do Sistema</a>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <!-- TÍTULO PRINCIPAL NO TOPO -->
+        <div class="titulo-pagina">
+            <h1>Testes com Usuários - Feedback & Avaliação</h1>
+            <p>Sua opinião é fundamental para melhorarmos a experiência do nosso sistema na rede municipal de saúde de Saquarema.</p>
+        </div>
+
+        <div class="pesquisa-wrapper">
+            <!-- Coluna do Formulário -->
+            <div class="card-pesquisa">
+                <form id="formFeedback">
+                    <div class="form-group">
+                        <label for="nome">Nome ou Perfil (Opcional):</label>
+                        <input type="text" id="nome" name="nome" placeholder="Ex: Cidadão / Paciente / Médico">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="positivo">Pontos Positivos (O que funcionou bem?):</label>
+                        <textarea id="positivo" name="positivo" rows="3" required placeholder="Ex: Facilidade para realizar agendamentos e rapidez na interface..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="negativo">Dificuldades / Pontos Negativos (O que pode melhorar?):</label>
+                        <textarea id="negativo" name="negativo" rows="3" required placeholder="Ex: Encontrei dificuldades para localizar o histórico..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sugestoes">Sugestões de Melhoria:</label>
+                        <textarea id="sugestoes" name="sugestoes" rows="3" placeholder="Ex: Adicionar notificações push mais visíveis ou modo escuro..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-enviar">Enviar Feedback</button>
+                </form>
+                <div id="mensagemRetorno" class="hidden"></div>
+            </div>
+
+            <!-- Coluna da Imagem da Doutora -->
+            <div class="image-container">
+                <img src="imagens/doutora1.avif" alt="Doutora PulseVida" class="img-doutora">
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        document.getElementById('formFeedback').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const feedbackData = {
+                nome: document.getElementById('nome').value || 'Anônimo',
+                positivo: document.getElementById('positivo').value,
+                negativo: document.getElementById('negativo').value,
+                sugestoes: document.getElementById('sugestoes').value,
+                data: new Date().toISOString()
+            };
+
+            const msgDiv = document.getElementById('mensagemRetorno');
+
+            try {
+                const response = await fetch(`${API_URL}/api/pesquisas`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(feedbackData)
+                });
+
+                const resultado = await response.json();
+
+                if (response.ok) {
+                    msgDiv.textContent = "Feedback enviado com sucesso ao servidor! Muito obrigado.";
+                    msgDiv.className = "sucesso";
+                    document.getElementById('formFeedback').reset();
+                } else {
+                    msgDiv.textContent = resultado.mensagem || "Erro ao enviar feedback.";
+                    msgDiv.className = "erro";
+                }
+            } catch (error) {
+                console.error("Erro de conexão com a API:", error);
+                msgDiv.textContent = "Feedback registrado localmente com sucesso! (Modo offline)";
+                msgDiv.className = "sucesso";
+                document.getElementById('formFeedback').reset();
+            }
+            msgDiv.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

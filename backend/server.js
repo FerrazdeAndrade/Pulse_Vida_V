@@ -9,6 +9,7 @@ app.use(express.json());
 
 // --- BANCOS DE DADOS TEMPORÁRIOS EM MEMÓRIA ---
 let bancoDeDadosAgendamentos = [];
+let bancoDeDadosPesquisas = []; // Movido para cima para garantir o escopo correto
 
 // Usuários iniciais do sistema (Paciente, Médico e Administrador)
 let bancoDeDadosUsuarios = [
@@ -38,7 +39,6 @@ app.post('/api/login', (req, res) => {
 app.post('/api/usuarios', (req, res) => {
     const novoUsuario = req.body;
     
-    // Evita duplicidade simples de usuário
     const existe = bancoDeDadosUsuarios.find(u => u.usuario === novoUsuario.usuario);
     if (existe) {
         return res.status(400).json({ sucesso: false, mensagem: "Usuário já cadastrado!" });
@@ -85,10 +85,56 @@ app.get('/api/admin/estatisticas', (req, res) => {
     res.json({
         totalAgendamentos: bancoDeDadosAgendamentos.length,
         totalUsuarios: bancoDeDadosUsuarios.length,
+        totalPesquisas: bancoDeDadosPesquisas.length,
         statusSistema: "Operacional"
     });
 });
 
+// --- ROTAS DE PESQUISAS / FEEDBACKS DOS USUÁRIOS ---
+
+// Salvar novo feedback
+app.post('/api/pesquisas', (req, res) => {
+    const novoFeedback = {
+        id: Date.now(),
+        ...req.body
+    };
+    bancoDeDadosPesquisas.push(novoFeedback);
+    
+    res.status(201).json({ 
+        sucesso: true, 
+        mensagem: "Feedback salvo com sucesso no servidor!", 
+        feedback: novoFeedback 
+    });
+});
+
+// Visualizar todos os dados das pesquisas em formato JSON
+app.get('/api/pesquisas', (req, res) => {
+    res.json(bancoDeDadosPesquisas);
+});
+
+// BÔNUS: Rota para baixar os dados das pesquisas diretamente em CSV (para abrir no Excel)
+app.get('/api/pesquisas/csv', (req, res) => {
+    if (bancoDeDadosPesquisas.length === 0) {
+        return res.status(404).send("Nenhum dado de pesquisa registrado ainda.");
+    }
+
+    let csv = "ID,Data,Nome,Positivo,Negativo,Sugestoes\n";
+    bancoDeDadosPesquisas.forEach(p => {
+        const dataFormatada = new Date(p.data).toLocaleString();
+        // Remove quebras de linha e vírgulas para não quebrar o formato CSV
+        const pos = (p.positivo || "").replace(/[\n\r]+/g, " ").replace(/,/g, ";");
+        const neg = (p.negativo || "").replace(/[\n\r]+/g, " ").replace(/,/g, ";");
+        const sug = (p.sugestoes || "").replace(/[\n\r]+/g, " ").replace(/,/g, ";");
+        
+        csv += `${p.id},"${dataFormatada}","${p.nome}","${pos}","${neg}","${sug}"\n`;
+    });
+
+    res.header('Content-Type', 'text/csv');
+    res.attachment('relatorio_feedbacks.csv');
+    res.send(csv);
+});
+
+// --- INICIALIZAÇÃO DO SERVIDOR (DEVE SER SEMPRE A ÚLTIMA LINHA) ---
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
