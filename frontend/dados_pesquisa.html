@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse & Vida - Dados das Pesquisas</title>
+    <link rel="stylesheet" href="Css/pesquisa.css">
+    <style>
+        /* Estilos adicionais específicos para a tabela de dados */
+        .tabela-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+        }
+        th {
+            background-color: #2e7d32;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn-voltar {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #2e7d32;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-voltar:hover {
+            background-color: #1b5e20;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar padrão -->
+    <header class="navbar">
+        <div class="logo">
+            <span class="pulse-text">Pulse</span><span class="vida-text">Vida</span> <span class="heart-icon">❤️</span>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-btn">Início</a>
+            <a href="pesquisa.html" class="nav-btn">Avaliação do Sistema</a>
+            <a href="dados_pesquisa.html" class="nav-btn active">Dados Registrados</a>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <div class="titulo-pagina">
+            <h1>Relatório de Feedbacks Recebidos</h1>
+            <p>Consulte abaixo todas as avaliações enviadas pelos usuários do sistema na rede municipal de saúde.</p>
+        </div>
+
+        <div>
+            <a href="pesquisa.html" class="btn-voltar">← Voltar para Pesquisa</a>
+        </div>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data/Hora</th>
+                        <th>Nome / Perfil</th>
+                        <th>Pontos Positivos</th>
+                        <th>Dificuldades / Negativos</th>
+                        <th>Sugestões</th>
+                    </tr>
+                 dulces
+                <tbody id="tabelaDados">
+                    <!-- Os dados serão inseridos dinamicamente via JavaScript -->
+                    <tr>
+                        <td colspan="5" style="text-align: center;">A carregar dados do servidor...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        async function carregarDadosPesquisa() {
+            const tbody = document.getElementById('tabelaDados');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/pesquisas`);
+                
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar dados do servidor.");
+                }
+
+                const dados = await response.json();
+
+                if (dados.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Nenhum feedback registado até o momento.</td></tr>`;
+                    return;
+                }
+
+                // Limpa a tabela e preenche com os registros
+                tbody.innerHTML = "";
+                dados.forEach(item => {
+                    const dataFormatada = item.data ? new Date(item.data).toLocaleString('pt-BR') : 'N/D';
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${dataFormatada}</td>
+                        <td>${item.nome || 'Anónimo'}</td>
+                        <td>${item.positivo || '-'}</td>
+                        <td>${item.negativo || '-'}</td>
+                        <td>${item.sugestoes || '-'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (error) {
+                console.error("Erro:", error);
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Não foi possível ligar ao servidor para carregar os dados.</td></tr>`;
+            }
+        }
+
+        // Executa a função ao carregar a página
+        window.onload = carregarDadosPesquisa;
+    </script>
+</body>
+</html>

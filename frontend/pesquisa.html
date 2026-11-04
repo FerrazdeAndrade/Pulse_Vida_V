@@ -15,6 +15,7 @@
         <nav class="nav-links">
             <a href="index.html" class="nav-btn">Início</a>
             <a href="pesquisa.html" class="nav-btn active">Avaliação do Sistema</a>
+            <a href="dados_pesquisa.html" class="nav-btn">Dados Registrados</a>
         </nav>
     </header>
 
@@ -86,20 +87,32 @@
                 const resultado = await response.json();
 
                 if (response.ok) {
-                    msgDiv.textContent = "Feedback enviado com sucesso ao servidor! Muito obrigado.";
+                    msgDiv.textContent = "Feedback enviado com sucesso! Redirecionando...";
                     msgDiv.className = "sucesso";
+                    msgDiv.classList.remove('hidden');
                     document.getElementById('formFeedback').reset();
+
+                    // Redireciona para a página de dados após 1.5 segundos
+                    setTimeout(() => {
+                        window.location.href = "dados_pesquisa.html";
+                    }, 1500);
                 } else {
                     msgDiv.textContent = resultado.mensagem || "Erro ao enviar feedback.";
                     msgDiv.className = "erro";
+                    msgDiv.classList.remove('hidden');
                 }
             } catch (error) {
                 console.error("Erro de conexão com a API:", error);
-                msgDiv.textContent = "Feedback registrado localmente com sucesso! (Modo offline)";
+                msgDiv.textContent = "Feedback registrado localmente! Redirecionando...";
                 msgDiv.className = "sucesso";
+                msgDiv.classList.remove('hidden');
                 document.getElementById('formFeedback').reset();
+
+                // Redireciona mesmo se estiver em modo offline/catch
+                setTimeout(() => {
+                    window.location.href = "dados_pesquisa.html";
+                }, 1500);
             }
-            msgDiv.classList.remove('hidden');
         });
     </script>
 </body>
